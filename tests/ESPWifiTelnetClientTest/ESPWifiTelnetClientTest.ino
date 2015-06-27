@@ -3,8 +3,8 @@
   It echoes any serial bytes to the server, and any server bytes
   to the serial port
 
-  note: the header file "settings.h" is not included in this repository.
-  Create it in your Arduino sketch and include the following variables:
+  note: the header file "settings.h" is included in this repository.
+  Include the following variables:
   char ssid[]     = "ssid";     // your network SSID
   char password[] = "password"; // your network password
   char host[] = "192.168.0.2";  // the IP address of the device running the server
