@@ -1,18 +1,22 @@
 /*
   This sketch makes a telnet client on port 8080 to a server
-  It echoes any serial bytes to the server, and any server bytes 
+  It echoes any serial bytes to the server, and any server bytes
   to the serial port
 
+  note: the header file "settings.h" is not included in this repository.
+  Create it in your Arduino sketch and include the following variables:
+  char ssid[]     = "ssid";     // your network SSID
+  char password[] = "password"; // your network password
+  char host[] = "192.168.0.2";  // the IP address of the device running the server
+
   created 26 Jun 2015
+  modified 27 Jun 2015
   by Tom Igoe
 
  */
 
 #include <ESP8266WiFi.h>
-
-char ssid[]     = "ssid";
-char password[] = "password";
-char host[] = "192.168.0.2";
+#include "settings.h"
 
 WiFiClient client;
 const int port = 8080;
@@ -42,17 +46,9 @@ void setup() {
   delay(100);
   // Use WiFiClient class to create TCP connections
   Serial.print("connecting to ");
-  Serial.println(server);
+  Serial.println(host);
 
-  client.connect(host, port);
-
-  while (!client.connected()) {
-    Serial.println("connection failed, trying again");
-    delay(2000);
-    client.connect(host, port);
-  }
-  // This will send the request to the server
-  client.println("Hello");
+  login();
 }
 
 
@@ -68,5 +64,17 @@ void loop() {
     char line = Serial.read();
     client.write(line);
   }
+}
+
+boolean login() {
+  client.connect(host, port);
+
+  while (!client.connected()) {
+    Serial.println("connection failed, trying again");
+    delay(2000);
+    client.connect(host, port);
+  }
+  // This will send the IP address to the server
+  client.println(WiFi.localIP());
 }
 
