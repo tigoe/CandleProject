@@ -30,13 +30,13 @@ int numColors = sizeof(keyColors) / 4;
 int flickerInterval = 30;                // in millis, the delay between flicker steps
 int threshold = 50;                      // difference threshold for sensor
 long lastTwinkle = 0;                    // how long since the last twinkle
-
+boolean online = false;                  // whether the client is online
 
 void setup()  {
-   mySerial.begin(9600);                  // initialize serial
+  mySerial.begin(9600);                  // initialize serial
   strip.begin();                          // initialize pixel strip
   for (int pixel = 0; pixel < numPixels; pixel++) {
-    strip.setPixelColor(pixel, 0, 0, 0);  // set the color for this pixel
+    strip.setPixelColor(pixel, 0, 0, 0);  // turn off pixel
     strip.show();                         // refresh the strip
   }
   delay(1000);    // delay to see the LEDs reset before main loop
@@ -51,6 +51,10 @@ void loop() {
   // create the flicker effect:
   if (millis() % flickerInterval < 2) {
     flickerPixels();
+  }  
+  
+  if (!online) {
+    strip.setPixelColor(0, 0, 0, 34);  // turn first pixel to low blue
   }
 
   // read sensor every half second:
@@ -78,6 +82,12 @@ void readSerial() {
   switch (input) {
     case '*':    // do a twinkle
       twinkle();
+      break;
+    case '1':
+      online = true;
+      break;
+    case '0':
+      online = false;
       break;
     default:  // placeholder for other options here
       break;

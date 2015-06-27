@@ -27,7 +27,7 @@ void setup() {
   Serial.begin(9600);
   Serial.setTimeout(10);
   client.setTimeout(10);
-  Serial.print("Connecting to ");
+  Serial.print("Connecting to ");   // connect to access point
   Serial.println(ssid);
 
   WiFi.begin(ssid, password);
@@ -36,18 +36,14 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
-
+  // when connected to access point, acknowledge it:
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   delay(100);
-  // Use WiFiClient class to create TCP connections
-  Serial.print("connecting to ");
-  Serial.println(host);
-
-  login();
-  digitalWrite(15, HIGH);
+  digitalWrite(15, HIGH);       // activate the ATtiny
+  login();                      // log into the server
 }
 
 
@@ -65,6 +61,7 @@ void loop() {
   }
 
   if (!client.connected()) {
+    Serial.println("0");
     delay(1000);
     login();
   }
@@ -80,5 +77,6 @@ boolean login() {
   }
   // This will send the IP address to the server
   client.println(WiFi.localIP());
+  Serial.println("1");
 }
 
