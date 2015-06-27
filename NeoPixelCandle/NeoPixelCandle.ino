@@ -28,7 +28,7 @@ unsigned long pixelColor[numPixels];     // current color for each pixel
 // count of keyframe colors:
 int numColors = sizeof(keyColors) / 4;
 int flickerInterval = 30;                // in millis, the delay between flicker steps
-int threshold = 35;                      // difference threshold for sensor
+int threshold = 50;                      // difference threshold for sensor
 long lastTwinkle = 0;                    // how long since the last twinkle
 
 
