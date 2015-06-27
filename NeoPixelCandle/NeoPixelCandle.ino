@@ -1,8 +1,8 @@
 /*
   This sketch makes three NeoPixels fade in a candle-like behavior.
 
-
   created 26 Jun 2015
+  modified 27 Jun 2015
   by Tom Igoe
 
  */
@@ -11,32 +11,22 @@
 #include <SoftwareSerial.h>
 #include <Adafruit_NeoPixel.h>
 
-const int neoPixelPin = 2;
+const int neoPixelPin = 0;
 const int numPixels = 3;
 
 SoftwareSerial mySerial(3, 4); // RX, TX
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_RGB + NEO_KHZ800);
 
-// initial reference color range:
-const unsigned long referenceColors[] = {0xCB5D0F, 0xB4470C, 0x95310C, 0x854E0B};
-// the final color of all pixels before they flicker out:
-const unsigned long finalColor = 0x1F0F02;
 // changing range of keyframe colors for the pixels to flicker to:
 unsigned long keyColors[] = {0xCB500F, 0xB4410C, 0x95230C, 0x853E0B};
 
 unsigned long targetColor[numPixels];    // next target for each pixel
 unsigned long pixelColor[numPixels];     // current color for each pixel
 
-
 // count of keyframe colors:
 int numColors = sizeof(keyColors) / 4;
-unsigned long slowFadeInterval =  169400;   // in millis, the time between fade changes
-unsigned long lastFade = 0;                 // timestamp of the last call to fadeToRed()
-int flickerInterval = 30;                   // in millis, the delay between flicker steps
-
-boolean finished = false;  // whether or not the slow fade is finished
-
+int flickerInterval = 30;                // in millis, the delay between flicker steps
 
 void setup()
 {
@@ -52,29 +42,35 @@ void setup()
 }
 
 void loop() {
-
   // if you get a serial x, make with the twinkling:
   if (mySerial.available()) {
-    char input = mySerial.read();
-    if (input == 'x') {
-      twinkle();
-    }
+    readSerial();
   }
-  
+
   // create the flicker effect:
   if (millis() % flickerInterval < 2) {
     flickerPixels();
   }
 
-  // gradually fade the keyframe colors lower and more toward the red:
-  if (millis() - lastFade >= slowFadeInterval) {
-    finished = fadeToRed();
-  }
-
-   // update the strip:
+  // update the strip:
   strip.show();
 }
 
+/*
+  this function reads serial input and interprets it
+ */
+
+void readSerial() {
+  char input = mySerial.read();
+  long newColor = 0;
+  switch (input) {
+    case 'x':    // do a twinkle
+      twinkle();
+      break;
+      default:  // placeholder for other options here
+      break;
+  }
+}
 
 /*
   this function creates the twinkle effect:
@@ -103,25 +99,6 @@ void flickerPixels() {
     // set the pixel color in the strip:
     strip.setPixelColor(thisPixel, pixelColor[thisPixel]);// set the color for this pixel
   }
-}
-
-/*
-  This function fades all the key colors toward a low reddish orange
-*/
-boolean fadeToRed() {
-  boolean result = true;
-  // iterate over all pixels:
-  for (int thisColor = 0; thisColor < numColors; thisColor++) {
-    // calculate a new keyColor closer to the final color:
-    keyColors[thisColor] = compare(keyColors[thisColor], finalColor);
-
-    // if all the keyColors == the final color then you're finished:
-    if (keyColors[thisColor] != finalColor) {
-      result = false;
-    }
-  }
-  lastFade = millis();
-  return result;
 }
 
 /*
