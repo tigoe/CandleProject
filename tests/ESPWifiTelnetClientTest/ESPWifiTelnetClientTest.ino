@@ -22,13 +22,11 @@ WiFiClient client;
 const int port = 8080;
 
 void setup() {
+  pinMode(15, OUTPUT);
+  digitalWrite(15, LOW);     // hold the ATTiny in reset until you connect
   Serial.begin(9600);
-  delay(10);
-
-  // We start by connecting to a WiFi network
-
-  Serial.println();
-  Serial.println();
+  Serial.setTimeout(10);
+  client.setTimeout(10);
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
@@ -49,20 +47,26 @@ void setup() {
   Serial.println(host);
 
   login();
+  digitalWrite(15, HIGH);
 }
 
 
 void loop() {
   // Read all the lines of the reply from server and print them to Serial
   while (client.available()) {
-    char line = client.read();
-    Serial.write(line);
+    String line = client.readStringUntil('\n');
+    Serial.print(line);
   }
 
   // Read all the lines of the reply from server and print them to Serial
   while (Serial.available()) {
-    char line = Serial.read();
-    client.write(line);
+    String line = Serial.readStringUntil('\n');
+    client.print(line);
+  }
+
+  if (!client.connected()) {
+    delay(1000);
+    login();
   }
 }
 

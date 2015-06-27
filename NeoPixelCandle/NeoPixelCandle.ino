@@ -1,3 +1,4 @@
+
 /*
   This sketch makes three NeoPixels fade in a candle-like behavior.
 
@@ -7,16 +8,16 @@
 
  */
 
-
 #include <SoftwareSerial.h>
 #include <Adafruit_NeoPixel.h>
 
 const int neoPixelPin = 0;
 const int numPixels = 3;
 
-SoftwareSerial mySerial(3, 4); // RX, TX
+SoftwareSerial mySerial(3, 1); // RX, TX
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_RGB + NEO_KHZ800);
+
 
 // changing range of keyframe colors for the pixels to flicker to:
 unsigned long keyColors[] = {0xCB500F, 0xB4410C, 0x95230C, 0x853E0B};
@@ -27,18 +28,18 @@ unsigned long pixelColor[numPixels];     // current color for each pixel
 // count of keyframe colors:
 int numColors = sizeof(keyColors) / 4;
 int flickerInterval = 30;                // in millis, the delay between flicker steps
+int threshold = 35;                      // difference threshold for sensor
+long lastTwinkle = 0;                    // how long since the last twinkle
 
-void setup()
-{
-  pinMode(1, OUTPUT);
-  // set the data rate for the SoftwaremySerial port
-  mySerial.begin(9600);
-  mySerial.setTimeout(10);  // set serial timeout
-  strip.begin();          // initialize pixel strip
+
+void setup()  {
+   mySerial.begin(9600);                  // initialize serial
+  strip.begin();                          // initialize pixel strip
   for (int pixel = 0; pixel < numPixels; pixel++) {
-    strip.setPixelColor(pixel, 0, 0, 0);// set the color for this pixel
-    strip.show();                                // refresh the strip
+    strip.setPixelColor(pixel, 0, 0, 0);  // set the color for this pixel
+    strip.show();                         // refresh the strip
   }
+  delay(1000);    // delay to see the LEDs reset before main loop
 }
 
 void loop() {
@@ -52,6 +53,17 @@ void loop() {
     flickerPixels();
   }
 
+  // read sensor every half second:
+  if (millis() - lastTwinkle > 500) {       // disable the sensor after a sensing event happens
+    int sensor =  analogRead(1);            // read sensor
+    delay(1);                               // allow ADC to settle
+    int trimmer = analogRead(2);            // read trimmer pot for comparison
+    int difference = abs(sensor - trimmer); // compare the two
+    if (difference > threshold) {           // if there's adequate difference
+      mySerial.println(difference);         // send it to server
+      twinkle();                            // make with the twinkle effect
+    }
+  }
   // update the strip:
   strip.show();
 }
@@ -64,10 +76,10 @@ void readSerial() {
   char input = mySerial.read();
   long newColor = 0;
   switch (input) {
-    case 'x':    // do a twinkle
+    case '*':    // do a twinkle
       twinkle();
       break;
-      default:  // placeholder for other options here
+    default:  // placeholder for other options here
       break;
   }
 }
@@ -79,6 +91,7 @@ void twinkle() {
   int whichPixel = random(numPixels);
   int thisPixel = whichPixel; // pick a random pixel from the visible list
   pixelColor[thisPixel] = 0xFFDDDD;          // set its color to white
+  lastTwinkle = millis();
 }
 
 
