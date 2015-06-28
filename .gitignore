@@ -1,2 +1,3 @@
 
 tests/ESPWifiTelnetClientTest/settings.h
+node_modules/*
