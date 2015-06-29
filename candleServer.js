@@ -9,33 +9,33 @@ modified 28 Jun 2015
 by Tom Igoe
 */
 
-
 var express = require('express');	// include express.js
 io = require('socket.io'),				// include socket.io
-net = require('net'),             // make an instance of the net library
+net = require('net'),             // include the net library
 app = express(),									// make an instance of express.js
-webServer = app.listen(8000),			// start a server with the express instance
+webServer = app.listen(8000),			// start a web server with the express instance
 webSocketServer = io(webServer);	// make a webSocket server using the express server
 
 //  set up server and webSocketServer listener functions:
-app.use(express.static('public'));					// serve files from the public folder
-app.get('/:name', serveFiles);							// listener for all static file requests
+app.use(express.static('public'));					  // serve files from the public folder
+app.get('/:name', serveFiles);							  // listener for all static file requests
 webSocketServer.on('connection', openSocket);	// listener for websocket data
 
 var clients = new Array,  // array to track TCP clients when they connect
 input = '';               // input string from the keyboard (STDIN)
 var tcpServer = net.createServer(listenForClients);  // create the server
-tcpServer.listen(8080);           // start the TCP socket server listening:
+tcpServer.listen(8080);           // start the TCP socket server listening
 
 var stdin = process.openStdin();    // enable input from the keyboard
 stdin.setEncoding('utf8');          // encode everything typed as a string
 
-
+// serve web files from /public directory:
 function serveFiles(request, response) {
   var fileName = request.params.name;				// get the file name from the request
   response.sendFile(fileName);							// send the file
 }
 
+// open a webSocket in response to a client request:
 function openSocket(webSocket){
   console.log('new user address: ' + webSocket.handshake.address);
   // send something to the web client with the data:
@@ -79,16 +79,16 @@ function openSocket(webSocket){
   }
 }
 
-// This function is called every time a new client connects:
+// This function is called every time a new TCP client connects:
 function listenForClients(tcpClient) {
-  console.log('client connected');
+  console.log('client connected at ' + new Date());
   tcpClient.setEncoding('utf8');  // encode everything sent by the client as a string
   tcpClient.write('hello');      // send the client a hello message
   clients.push(tcpClient);       // append the client to the array of clients
 
   // this function runs if the client sends an 'end' event:
   tcpClient.on('end', function() {
-    console.log('client disconnected');
+    console.log('client disconnected at ' + new Date() );
     var position = clients.indexOf(tcpClient); // get the client's position in the array
     clients.splice(position, 1);            // delete it from the array
   });
@@ -106,6 +106,7 @@ function listenForClients(tcpClient) {
     // handle any network errors:
     tcpClient.on('error', function (err) {
       console.error('Network connection error', err);
+      console.error('client: ' + tcpClient.remoteAddress);
     });
   });
 }

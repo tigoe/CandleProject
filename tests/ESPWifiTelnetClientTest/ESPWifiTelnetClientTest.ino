@@ -20,6 +20,8 @@
 
 WiFiClient client;
 const int port = 8080;
+byte mac[6];
+long tenMinutes = 36000000;
 
 void setup() {
   pinMode(15, OUTPUT);
@@ -29,9 +31,8 @@ void setup() {
   client.setTimeout(10);
   Serial.print("Connecting to ");   // connect to access point
   Serial.println(ssid);
-
   WiFi.begin(ssid, password);
-
+  WiFi.macAddress(mac);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -60,8 +61,12 @@ void loop() {
     client.print(line);
   }
 
+  if (client.connected() && millis() % tenMinutes < 5) {
+    client.println("alive");
+
+  }
   if (!client.connected()) {
-    Serial.println("0");
+    Serial.print("000");    // tell the ATtiny that you're disconnected
     delay(1000);
     login();
   }
@@ -69,14 +74,15 @@ void loop() {
 
 boolean login() {
   client.connect(host, port);
-
+  delay(1000);
   while (!client.connected()) {
     Serial.println("connection failed, trying again");
     delay(2000);
     client.connect(host, port);
   }
+  Serial.print("111");      // tell the ATtiny that you're connected
   // This will send the IP address to the server
-  client.println(WiFi.localIP());
-  Serial.println("1");
+  client.println("Hello");
 }
+
 

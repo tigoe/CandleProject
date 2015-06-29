@@ -78,7 +78,6 @@ void loop() {
 
 void readSerial() {
   char input = mySerial.read();
-  long newColor = 0;
   switch (input) {
     case '*':    // do a twinkle
       twinkle();

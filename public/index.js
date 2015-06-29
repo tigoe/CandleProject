@@ -5,6 +5,7 @@ var clients = [];
 var clientCount = 24;
 var tableSize = 30;
 var img, img2;
+var chosenSprite = null;
 function preload() {
   img = loadImage('img/circle.svg');
   img2 = loadImage('img/redcircle.svg');
@@ -20,30 +21,48 @@ function setup() {
     var col = (Math.floor(c / width)* (tableSize+ 5)) + tableSize;
     var myLoc = {'x': row, 'y': col };
 
-    var table = createSprite(row, col);
-    table.mouseIsActive = true;
-    table.addImage('base', img);
-    table.addImage('rollover', img2);
+    clients[c] = {'mac': null, 'ip': null, 'loc': myLoc, 'status': null, 'sprite': null};
 
-    table.onMouseOver = function() {
-      this.changeAnimation("rollover");
+      clients[c].sprite = createSprite(row, col);
+
+    clients[c].sprite.addImage('base', img);
+    clients[c].sprite.addImage('rollover', img2);
+
+    clients[c].sprite.onMouseOver = function() {
+      this.changeImage("rollover");
+      if (chosenSprite === this) {
+        this.position.x = mouseX;
+        this.position.y = mouseY;
+      }
     }
 
-    table.onMouseOut = function() {
-      this.changeAnimation("base");
+    clients[c].sprite.onMouseOut = function() {
+      this.changeImage("base");
     }
 
-    table.onMousePressed = function() {
+    clients[c].sprite.onMouseReleased = function() {
+      if (chosenSprite === this) {
+        this.position.x = mouseX;
+        this.position.y = mouseY;
+      }
+
+      this.mouseIsActive = false;
+      chosenSprite = null;
+      println("released");
+    }
+
+    clients[c].sprite.onMousePressed = function() {
+      this.mouseIsActive = true;
+      chosenSprite = this;
       var msg = this.position.x + ' ' + this.position.y;
       println(msg);
       socket.emit('message', msg);
     }
-
-    clients[c] = {'mac': null, 'ip': null, 'loc': myLoc, 'status': null, 'sprite': table};
   }
 }
 
 function draw() {
+  background(255);
   drawSprites();
 }
 
