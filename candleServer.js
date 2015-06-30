@@ -82,11 +82,10 @@ function openSocket(webSocket){
 // This function is called every time a new TCP client connects:
 function listenForClients(tcpClient) {
   console.log('client connected at ' + new Date());
-  if (typeof(tcpClient) != 'undefined') {
     tcpClient.setEncoding('utf8');  // encode everything sent by the client as a string
     tcpClient.write('hello');      // send the client a hello message
     clients.push(tcpClient);       // append the client to the array of clients
-  }
+
   // this function runs if the client sends an 'end' event:
   tcpClient.on('end', function() {
     console.log('client disconnected at ' + new Date() );
@@ -127,6 +126,11 @@ stdin.on('data', function(data) {
 // this function broadcasts data to all TCP clients.
 function broadcast(data) {
   for (thisClient in clients) {     // iterate over the client array
-    clients[thisClient].write(data);// send the message to each client
+    clients[thisClient].write(data, function (error){
+      if (error) {
+        console.error(error);
+        clients[thisClient].end();
+      }
+    });// send the message to each client
   }
 }
