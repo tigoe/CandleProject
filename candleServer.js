@@ -107,6 +107,7 @@ function listenForClients(tcpClient) {
     tcpClient.on('error', function (err) {
       console.error('Network connection error', err);
       console.error('client: ' + tcpClient.remoteAddress);
+      tcpClient.end();
     });
   });
 }
