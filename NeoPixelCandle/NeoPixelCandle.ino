@@ -3,7 +3,7 @@
   This sketch makes three NeoPixels fade in a candle-like behavior.
 
   created 26 Jun 2015
-  modified 27 Jun 2015
+  modified 30 Jun 2015
   by Tom Igoe
 
  */
@@ -14,7 +14,7 @@
 const int neoPixelPin = 0;
 const int numPixels = 3;
 
-SoftwareSerial mySerial(3, 1); // RX, TX
+SoftwareSerial mySerial(3, 4); // RX, TX
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_RGB + NEO_KHZ800);
 
@@ -28,7 +28,7 @@ unsigned long pixelColor[numPixels];     // current color for each pixel
 // count of keyframe colors:
 int numColors = sizeof(keyColors) / 4;
 int flickerInterval = 30;                // in millis, the delay between flicker steps
-int threshold = 50;                      // difference threshold for sensor
+int threshold = 950;                    // difference threshold for sensor
 long lastTwinkle = 0;                    // how long since the last twinkle
 boolean online = false;                  // whether the client is online
 
@@ -51,8 +51,8 @@ void loop() {
   // create the flicker effect:
   if (millis() % flickerInterval < 2) {
     flickerPixels();
-  }  
-  
+  }
+
   if (!online) {
     strip.setPixelColor(0, 0, 0, 34);  // turn first pixel to low blue
   }
@@ -60,11 +60,8 @@ void loop() {
   // read sensor every half second:
   if (millis() - lastTwinkle > 500) {       // disable the sensor after a sensing event happens
     int sensor =  analogRead(1);            // read sensor
-    delay(1);                               // allow ADC to settle
-    int trimmer = analogRead(2);            // read trimmer pot for comparison
-    int difference = abs(sensor - trimmer); // compare the two
-    if (difference > threshold) {           // if there's adequate difference
-      mySerial.println(difference);         // send it to server
+    if (sensor < threshold) {               // if there's adequate difference
+      mySerial.println(sensor);             // send it to server
       twinkle();                            // make with the twinkle effect
     }
   }
@@ -102,7 +99,6 @@ void twinkle() {
   pixelColor[thisPixel] = 0xFFDDDD;          // set its color to white
   lastTwinkle = millis();
 }
-
 
 /*
   this function creates the flicker effect:
