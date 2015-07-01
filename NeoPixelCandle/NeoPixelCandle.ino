@@ -7,7 +7,7 @@
   by Tom Igoe
 
  */
-
+#include <CapacitiveSensor.h>
 #include <SoftwareSerial.h>
 #include <Adafruit_NeoPixel.h>
 
@@ -18,6 +18,7 @@ SoftwareSerial mySerial(3, 4); // RX, TX
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_RGB + NEO_KHZ800);
 
+CapacitiveSensor  mySensor = CapacitiveSensor(1, 2);       // 10M resistor between pins 1 & 2, pin 2 is sensor pin
 
 // changing range of keyframe colors for the pixels to flicker to:
 unsigned long keyColors[] = {0xCB500F, 0xB4410C, 0x95230C, 0x853E0B};
@@ -28,12 +29,14 @@ unsigned long pixelColor[numPixels];     // current color for each pixel
 // count of keyframe colors:
 int numColors = sizeof(keyColors) / 4;
 int flickerInterval = 30;                // in millis, the delay between flicker steps
-int threshold = 950;                    // difference threshold for sensor
+int threshold = 250;                    // difference threshold for sensor
 long lastTwinkle = 0;                    // how long since the last twinkle
 boolean online = false;                  // whether the client is online
 
 void setup()  {
   mySerial.begin(9600);                  // initialize serial
+  //mySensor.set_CS_AutocaL_Millis(250);
+  mySensor.set_CS_Timeout_Millis(50);
   strip.begin();                          // initialize pixel strip
   for (int pixel = 0; pixel < numPixels; pixel++) {
     strip.setPixelColor(pixel, 0, 0, 0);  // turn off pixel
@@ -58,11 +61,11 @@ void loop() {
   }
 
   // read sensor every half second:
-  if (millis() - lastTwinkle > 500) {       // disable the sensor after a sensing event happens
-    int sensor =  analogRead(1);            // read sensor
-    if (sensor < threshold) {               // if there's adequate difference
-      mySerial.println(sensor);             // send it to server
-      twinkle();                            // make with the twinkle effect
+  if (millis() - lastTwinkle > 250) {       // disable the sensor after a sensing event happens
+    long touch =  mySensor.capacitiveSensor(15);
+    if (touch > threshold) {
+      mySerial.println(touch);
+      twinkle();
     }
   }
   // update the strip:

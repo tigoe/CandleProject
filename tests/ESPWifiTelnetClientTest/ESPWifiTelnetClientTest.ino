@@ -21,7 +21,7 @@
 WiFiClient client;
 const int port = 8080;
 byte mac[6];
-long tenMinutes = 36000000;
+long tenMinutes = 1000*60*10;
 
 void setup() {
   pinMode(15, OUTPUT);
@@ -61,7 +61,7 @@ void loop() {
     client.print(line);
   }
 
-  if (client.connected() && millis() % tenMinutes < 5) {
+  if (client.connected() && (millis() % tenMinutes < 5)) {
     client.println("alive");
 
   }
