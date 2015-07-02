@@ -24,8 +24,8 @@ byte mac[6];
 long tenMinutes = 1000*60*10;
 
 void setup() {
-  pinMode(15, OUTPUT);
-  digitalWrite(15, LOW);     // hold the ATTiny in reset until you connect
+  pinMode(5, OUTPUT);
+  digitalWrite(5, LOW);     // hold the ATTiny in reset until you connect
   Serial.begin(9600);
   Serial.setTimeout(10);
   client.setTimeout(10);
@@ -43,7 +43,7 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   delay(100);
-  digitalWrite(15, HIGH);       // activate the ATtiny
+  digitalWrite(5, HIGH);       // activate the ATtiny
   login();                      // log into the server
 }
 
