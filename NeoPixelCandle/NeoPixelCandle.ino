@@ -16,7 +16,7 @@ const int numPixels = 3;
 
 SoftwareSerial mySerial(3, 4); // RX, TX
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_RGB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_GRB + NEO_KHZ800);
 
 CapacitiveSensor  mySensor = CapacitiveSensor(1, 2);       // 10M resistor between pins 1 & 2, pin 2 is sensor pin
 
