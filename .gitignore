@@ -1,4 +1,5 @@
 
 tests/ESPWifiTelnetClientTest/settings.h
 node_modules/*
-circuit/candle_circuit.b#5
+circuit/candle_circuit.b#*
+circuit/candle_circuit.s#*
