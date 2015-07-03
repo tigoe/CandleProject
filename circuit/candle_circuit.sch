@@ -4864,7 +4864,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 </class>
 </classes>
 <parts>
-<part name="X1" library="adafruit" deviceset="ESP-12" device="" value="ESP-12"/>
+<part name="IC2" library="adafruit" deviceset="ESP-12" device="" value="ESP-12"/>
 <part name="IC1" library="atmel" deviceset="TINY10" device="P"/>
 <part name="+3V1" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
@@ -4885,12 +4885,12 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="+3V6" library="supply1" deviceset="+3V3" device=""/>
 <part name="P+2" library="supply1" deviceset="V+" device=""/>
 <part name="JP2" library="pinhead" deviceset="PINHD-1X1" device="" value="Sensor"/>
-<part name="U$1" library="ITP_Lab" deviceset="REGULATOR" device="3.3V-UA78M33CDCYR"/>
+<part name="U1" library="ITP_Lab" deviceset="REGULATOR" device="3.3V-UA78M33CDCYR"/>
 <part name="C1" library="SparkFun-Capacitors" deviceset="CAP_POL" device="C" value="0.1uF"/>
 <part name="R2" library="adafruit" deviceset="R-US_" device="R0603" value="10k"/>
 <part name="JP3" library="microbuilder" deviceset="HEADER-1X2" device="" value="POWER"/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
-<part name="JP1" library="microbuilder" deviceset="HEADER-1X6" device="" value="FTDI"/>
+<part name="JP1" library="microbuilder" deviceset="HEADER-1X6" device="" value="Serial"/>
 <part name="+3V9" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
 <part name="D1" library="microbuilder" deviceset="DIODE-SCHOTTKY" device="SOD-123" value="MBR120"/>
@@ -4911,10 +4911,10 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <part name="+3V4" library="supply1" deviceset="+3V3" device=""/>
 <part name="R5" library="adafruit" deviceset="R-US_" device="R0603" value="10k"/>
 <part name="R4" library="adafruit" deviceset="R-US_" device="R0603" value="10k"/>
-<part name="JP4" library="microbuilder" deviceset="HEADER-1X2" device="" value="Test"/>
+<part name="JP4" library="microbuilder" deviceset="HEADER-1X2" device="" value="V+ Test"/>
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="P+4" library="supply1" deviceset="V+" device=""/>
-<part name="JP5" library="pinhead" deviceset="PINHD-1X1" device="" value="TEST"/>
+<part name="JP5" library="pinhead" deviceset="PINHD-1X1" device="" value="3V3 Test"/>
 <part name="+3V8" library="supply1" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
@@ -4923,7 +4923,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <text x="-5.08" y="99.06" size="1.778" layer="91">3.3v/500mA @ ITP</text>
 </plain>
 <instances>
-<instance part="X1" gate="G$1" x="30.48" y="63.5"/>
+<instance part="IC2" gate="G$1" x="30.48" y="63.5"/>
 <instance part="IC1" gate="G$1" x="30.48" y="27.94"/>
 <instance part="+3V1" gate="G$1" x="7.62" y="53.34"/>
 <instance part="GND2" gate="1" x="10.16" y="17.78"/>
@@ -4944,7 +4944,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <instance part="+3V6" gate="G$1" x="-60.96" y="106.68"/>
 <instance part="P+2" gate="1" x="86.36" y="48.26" rot="R180"/>
 <instance part="JP2" gate="G$1" x="71.12" y="27.94"/>
-<instance part="U$1" gate="G$1" x="2.54" y="93.98"/>
+<instance part="U1" gate="G$1" x="2.54" y="93.98"/>
 <instance part="C1" gate="G$1" x="-17.78" y="99.06"/>
 <instance part="R2" gate="G$1" x="-60.96" y="96.52" rot="R90"/>
 <instance part="JP3" gate="G$1" x="83.82" y="93.98" rot="R90"/>
@@ -4987,7 +4987,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <wire x1="10.16" y1="22.86" x2="10.16" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="X1" gate="G$1" pin="GND"/>
+<pinref part="IC2" gate="G$1" pin="GND"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 <wire x1="48.26" y1="50.8" x2="48.26" y2="48.26" width="0.1524" layer="91"/>
 </segment>
@@ -5034,7 +5034,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 </segment>
 <segment>
 <pinref part="GND13" gate="1" pin="GND"/>
-<pinref part="U$1" gate="G$1" pin="GND"/>
+<pinref part="U1" gate="G$1" pin="GND"/>
 <wire x1="-7.62" y1="86.36" x2="-7.62" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -5055,7 +5055,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 </net>
 <net name="+3V3" class="0">
 <segment>
-<pinref part="X1" gate="G$1" pin="VCC"/>
+<pinref part="IC2" gate="G$1" pin="VCC"/>
 <pinref part="+3V1" gate="G$1" pin="+3V3"/>
 <wire x1="12.7" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91"/>
 </segment>
@@ -5072,7 +5072,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <segment>
 <pinref part="+3V9" gate="G$1" pin="+3V3"/>
 <wire x1="20.32" y1="96.52" x2="20.32" y2="93.98" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="OUT"/>
+<pinref part="U1" gate="G$1" pin="OUT"/>
 <wire x1="20.32" y1="93.98" x2="15.24" y2="93.98" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -5174,14 +5174,14 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <pinref part="R2" gate="G$1" pin="1"/>
 </segment>
 <segment>
-<pinref part="X1" gate="G$1" pin="RESET"/>
+<pinref part="IC2" gate="G$1" pin="RESET"/>
 <wire x1="12.7" y1="68.58" x2="10.16" y2="68.58" width="0.1524" layer="91"/>
 <label x="5.08" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GPIO15" class="0">
 <segment>
-<pinref part="X1" gate="G$1" pin="GPIO15"/>
+<pinref part="IC2" gate="G$1" pin="GPIO15"/>
 <wire x1="48.26" y1="53.34" x2="60.96" y2="53.34" width="0.1524" layer="91"/>
 <label x="60.96" y="53.34" size="1.778" layer="95"/>
 </segment>
@@ -5201,7 +5201,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <junction x="-68.58" y="78.74"/>
 </segment>
 <segment>
-<pinref part="X1" gate="G$1" pin="GPIO0"/>
+<pinref part="IC2" gate="G$1" pin="GPIO0"/>
 <wire x1="48.26" y1="58.42" x2="60.96" y2="58.42" width="0.1524" layer="91"/>
 <label x="60.96" y="58.42" size="1.778" layer="95"/>
 </segment>
@@ -5218,7 +5218,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <label x="-15.24" y="45.72" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="X1" gate="G$1" pin="RXD"/>
+<pinref part="IC2" gate="G$1" pin="RXD"/>
 <wire x1="48.26" y1="66.04" x2="55.88" y2="66.04" width="0.1524" layer="91"/>
 <label x="55.88" y="66.04" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -5250,7 +5250,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <pinref part="IC1" gate="G$1" pin="(XTAL1)PB3"/>
 <wire x1="48.26" y1="30.48" x2="58.42" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="58.42" y1="30.48" x2="58.42" y2="68.58" width="0.1524" layer="91"/>
-<pinref part="X1" gate="G$1" pin="TXD"/>
+<pinref part="IC2" gate="G$1" pin="TXD"/>
 <wire x1="58.42" y1="68.58" x2="48.26" y2="68.58" width="0.1524" layer="91"/>
 <label x="58.42" y="68.58" size="1.778" layer="95" rot="R180"/>
 </segment>
@@ -5269,7 +5269,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <net name="N$5" class="0">
 <segment>
 <pinref part="D1" gate="G$1" pin="C"/>
-<pinref part="U$1" gate="G$1" pin="IN"/>
+<pinref part="U1" gate="G$1" pin="IN"/>
 <wire x1="-7.62" y1="101.6" x2="-7.62" y2="93.98" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -5289,7 +5289,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 </net>
 <net name="CH_PD" class="0">
 <segment>
-<pinref part="X1" gate="G$1" pin="CH_PD"/>
+<pinref part="IC2" gate="G$1" pin="CH_PD"/>
 <wire x1="12.7" y1="63.5" x2="2.54" y2="63.5" width="0.1524" layer="91"/>
 <label x="2.54" y="63.5" size="1.778" layer="95"/>
 </segment>
@@ -5301,7 +5301,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 </net>
 <net name="GPIO2" class="0">
 <segment>
-<pinref part="X1" gate="G$1" pin="GPIO2"/>
+<pinref part="IC2" gate="G$1" pin="GPIO2"/>
 <wire x1="48.26" y1="55.88" x2="60.96" y2="55.88" width="0.1524" layer="91"/>
 <label x="60.96" y="55.88" size="1.778" layer="95"/>
 </segment>
@@ -5323,7 +5323,7 @@ These are standard SMD and PTH capacitors. Normally 10uF, 47uF, and 100uF in ele
 <pinref part="IC1" gate="G$1" pin="(RESET)PB5"/>
 <wire x1="48.26" y1="35.56" x2="53.34" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="35.56" x2="53.34" y2="60.96" width="0.1524" layer="91"/>
-<pinref part="X1" gate="G$1" pin="GPIO5"/>
+<pinref part="IC2" gate="G$1" pin="GPIO5"/>
 <wire x1="53.34" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
