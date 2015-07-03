@@ -80,6 +80,7 @@ void readSerial() {
   char input = mySerial.read();
   switch (input) {
     case '*':    // do a twinkle
+      mySerial.println("Thanks");
       twinkle();
       break;
     case '1':

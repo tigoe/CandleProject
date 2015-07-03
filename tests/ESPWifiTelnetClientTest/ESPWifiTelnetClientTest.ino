@@ -52,7 +52,7 @@ void loop() {
   // Read all the lines of the reply from server and print them to Serial
   while (client.available()) {
     String line = client.readStringUntil('\n');
-    Serial.print(line);
+     Serial.print(line);
   }
 
   // Read all the lines of the reply from server and print them to Serial
