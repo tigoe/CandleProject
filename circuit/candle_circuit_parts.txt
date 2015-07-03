@@ -1,33 +1,35 @@
 Partlist
 
-Exported from candle_circuit.sch at 7/3/15 6:56 AM
+Exported from candle_circuit.brd at 7/3/15 7:48 AM
 
 EAGLE Version 7.3.0 Copyright (c) 1988-2015 CadSoft
 
 Assembly variant: 
 
-Part     Value                      Device                     Package                Library             Sheet
+Part     Value                      Package                Library             Position (inch)       Orientation
 
-C1       0.1uF                      CAP_POLC                   PANASONIC_C            SparkFun-Capacitors 1
-C2       0.1uF                      CAP_POLC                   PANASONIC_C            SparkFun-Capacitors 1
-D1       MBR120                     DIODE-SCHOTTKYSOD-123      SOD-123                microbuilder        1
-D2       1n4148                     DIODESOD-323               SOD-323                microbuilder        1
-IC1      TINY10P                    TINY10P                    DIL08                  atmel               1
-JP1      FTDI                       HEADER-1X6                 1X06_OVAL              microbuilder        1
-JP2      Sensor                     PINHD-1X1                  1X01                   pinhead             1
-JP3      POWER                      HEADER-1X2                 1X02_OVAL              microbuilder        1
-L1       WS2812B                    WS2812B                    WS2812B                adafruit            1
-L2       WS2812B                    WS2812B                    WS2812B                adafruit            1
-L3       WS2812B                    WS2812B                    WS2812B                adafruit            1
-LED1     RED                        LED0805_NOOUTLINE          CHIPLED_0805_NOOUTLINE microbuilder        1
-R1       1k                         R-US_R0603                 R0603                  adafruit            1
-R2       10k                        R-US_R0603                 R0603                  adafruit            1
-R3       10k                        R-US_R0603                 R0603                  adafruit            1
-R5       1M                         R-US_R0603                 R0603                  adafruit            1
-R6       470                        R-US_R0603                 R0603                  adafruit            1
-R7       10K                        RESISTOR0805_NOOUTLINE     0805-NO                microbuilder        1
-R8       10K                        RESISTOR0805_NOOUTLINE     0805-NO                microbuilder        1
-SW1      KMR2                       SWITCH_TACT_SMT4.6X2.8     BTN_KMR2_4.6X2.8       microbuilder        1
-SW2      KMR2                       SWITCH_TACT_SMT4.6X2.8     BTN_KMR2_4.6X2.8       microbuilder        1
-U$1      REGULATOR3.3V-UA78M33CDCYR REGULATOR3.3V-UA78M33CDCYR SOT223                 ITP_Lab             1
-X1       ESP-12                     ESP-12                     ESP-12                 adafruit            1
+C1       0.1uF                      PANASONIC_C            SparkFun-Capacitors (1.3 0.15)            R180
+C2       0.1uF                      PANASONIC_C            SparkFun-Capacitors (1.3 0.7)             R180
+D1       MBR120                     SOD-123                microbuilder        (1.13 0.8)            R90
+D2       1n4148                     SOD-323                microbuilder        (0.2 0.95)            R0
+IC1      TINY10P                    DIL08                  atmel               (0.6 1.65)            R0
+JP1      FTDI                       1X06_OVAL              microbuilder        (0.2 1.55)            R90
+JP2      Sensor                     1X01                   pinhead             (1.13 1.87)           R0
+JP3      POWER                      1X02_OVAL              microbuilder        (1.3 0.95)            R180
+JP4      Test                       1X02_OVAL              microbuilder        (1.3 1.14)            R180
+JP5      TEST                       1X01                   pinhead             (0.65 0.04)           R0
+L1       WS2812B                    WS2812B                adafruit            (0.85 1.25)           R180
+L2       WS2812B                    WS2812B                adafruit            (0.55 1.15)           R180
+L3       WS2812B                    WS2812B                adafruit            (0.85 1.02)           R0
+LED1     RED                        CHIPLED_0805_NOOUTLINE microbuilder        (1.06 0.31)           R90
+R1       1k                         R0603                  adafruit            (1.05 0.4)            R180
+R2       10k                        R0603                  adafruit            (0.3 0.07)            R0
+R3       10k                        R0603                  adafruit            (0.5 0.07)            R0
+R4       10k                        R0603                  adafruit            (0.62 0.91)           R0
+R5       10k                        R0603                  adafruit            (0.82 0.87)           R0
+R6       1M                         R0603                  adafruit            (0.9 1.75)            R270
+R7       470                        R0603                  adafruit            (0.95 1.55)           R90
+SW1      KMR2                       BTN_KMR2_4.6X2.8       microbuilder        (1.05 0.15)           R270
+SW2      KMR2                       BTN_KMR2_4.6X2.8       microbuilder        (1.05 0.55)           R270
+U$1      REGULATOR3.3V-UA78M33CDCYR SOT223                 ITP_Lab             (1.3 0.45)            R270
+X1       ESP-12                     ESP-12                 adafruit            (0.53 0.47)           R90
