@@ -21,7 +21,7 @@
 WiFiClient client;
 const int port = 8080;
 byte mac[6];
-long tenMinutes = 1000*60*10;
+long tenMinutes = 1000 * 60 * 10;
 
 void setup() {
   pinMode(5, OUTPUT);
@@ -51,8 +51,9 @@ void setup() {
 void loop() {
   // Read all the lines of the reply from server and print them to Serial
   while (client.available()) {
+    Serial.print("Got something");
     String line = client.readStringUntil('\n');
-     Serial.print(line);
+    Serial.print(line);
   }
 
   // Read all the lines of the reply from server and print them to Serial
@@ -66,7 +67,7 @@ void loop() {
 
   }
   if (!client.connected()) {
-    Serial.print("000");    // tell the ATtiny that you're disconnected
+    Serial.print("~~~");    // tell the ATtiny that you're disconnected
     delay(1000);
     login();
   }
@@ -80,7 +81,7 @@ boolean login() {
     delay(2000);
     client.connect(host, port);
   }
-  Serial.print("111");      // tell the ATtiny that you're connected
+  Serial.print("!!!");      // tell the ATtiny that you're connected
   // This will send the IP address to the server
   client.println("Hello");
 }

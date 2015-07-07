@@ -42,6 +42,7 @@ void setup()  {
     strip.setPixelColor(pixel, 0, 0, 0);  // turn off pixel
     strip.show();                         // refresh the strip
   }
+
   delay(1000);    // delay to see the LEDs reset before main loop
 }
 
@@ -64,7 +65,8 @@ void loop() {
   if (millis() - lastTwinkle > 250) {       // disable the sensor after a sensing event happens
     long touch =  mySensor.capacitiveSensor(15);
     if (touch > threshold) {
-      mySerial.println(touch);
+      //mySerial.println(touch);
+      mySerial.print("*");
       twinkle();
     }
   }
@@ -80,13 +82,12 @@ void readSerial() {
   char input = mySerial.read();
   switch (input) {
     case '*':    // do a twinkle
-      mySerial.println("Thanks");
       twinkle();
       break;
-    case '1':
+    case '!':
       online = true;
       break;
-    case '0':
+    case '~':
       online = false;
       break;
     default:  // placeholder for other options here
