@@ -3,3 +3,8 @@ tests/ESPWifiTelnetClientTest/settings.h
 node_modules/*
 circuit/candle_circuit.b#*
 circuit/candle_circuit.s#*
+circuit/*.png
+circuit/*.sol
+circuit/*.stc
+circuit/*.sts
+circuit/*.dri
