@@ -21,6 +21,8 @@ app.use(express.static('public'));					  // serve files from the public folder
 app.get('/:name', serveFiles);							  // listener for all static file requests
 webSocketServer.on('connection', openSocket);	// listener for websocket data
 
+process.setMaxListeners(0);
+
 var clients = new Array,  // array to track TCP clients when they connect
 input = '';               // input string from the keyboard (STDIN)
 var tcpServer = net.createServer(listenForClients);  // create the server
