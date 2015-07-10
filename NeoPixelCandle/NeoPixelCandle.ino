@@ -3,7 +3,7 @@
   This sketch makes three NeoPixels fade in a candle-like behavior.
 
   created 26 Jun 2015
-  modified 30 Jun 2015
+  modified 10 Jul 2015
   by Tom Igoe
 
  */

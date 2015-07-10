@@ -10,7 +10,7 @@
   char host[] = "192.168.0.2";  // the IP address of the device running the server
 
   created 26 Jun 2015
-  modified 27 Jun 2015
+  modified 8 Jul 2015
   by Tom Igoe
 
  */

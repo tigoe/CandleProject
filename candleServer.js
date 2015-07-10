@@ -5,7 +5,7 @@ A combination web server, webSocket server, and TCP socket server in node.js.
 Keeps track of clients in an array. Typing 'c' will print the array of clients
 
 created 27 Jun 2015
-modified 28 Jun 2015
+modified 10 Jul 2015
 by Tom Igoe
 */
 
@@ -21,7 +21,7 @@ app.use(express.static('public'));					  // serve files from the public folder
 app.get('/:name', serveFiles);							  // listener for all static file requests
 webSocketServer.on('connection', openSocket);	// listener for websocket data
 
-process.setMaxListeners(0);
+process.setMaxListeners(0);     // prevent memory leak when clients are messy
 
 var clients = new Array,  // array to track TCP clients when they connect
 input = '';               // input string from the keyboard (STDIN)
