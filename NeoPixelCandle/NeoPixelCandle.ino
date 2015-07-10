@@ -29,7 +29,7 @@ unsigned long pixelColor[numPixels];     // current color for each pixel
 // count of keyframe colors:
 int numColors = sizeof(keyColors) / 4;
 int flickerInterval = 30;                // in millis, the delay between flicker steps
-int threshold = 250;                    // difference threshold for sensor
+int threshold = 500;                    // difference threshold for sensor
 long lastTwinkle = 0;                    // how long since the last twinkle
 boolean online = false;                  // whether the client is online
 
@@ -65,8 +65,8 @@ void loop() {
   if (millis() - lastTwinkle > 250) {       // disable the sensor after a sensing event happens
     long touch =  mySensor.capacitiveSensor(15);
     if (touch > threshold) {
-      //mySerial.println(touch);
-      mySerial.print("*");
+      mySerial.print(touch);
+      mySerial.print(" *");
       twinkle();
     }
   }
