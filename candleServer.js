@@ -82,9 +82,9 @@ function openSocket(webSocket){
 // This function is called every time a new TCP client connects:
 function listenForClients(tcpClient) {
   console.log('client connected at ' + new Date());
-    tcpClient.setEncoding('utf8');  // encode everything sent by the client as a string
-    tcpClient.write('hello');      // send the client a hello message
-    clients.push(tcpClient);       // append the client to the array of clients
+  tcpClient.setEncoding('utf8');  // encode everything sent by the client as a string
+  tcpClient.write('hello');      // send the client a hello message
+  clients.push(tcpClient);       // append the client to the array of clients
 
   // this function runs if the client sends an 'end' event:
   tcpClient.on('end', function() {
@@ -101,7 +101,7 @@ function listenForClients(tcpClient) {
     if (data === 'x') {            // if the client sends 'exit',
     console.log('closing client');
     tcpClient.end();                  // disconnect the client
-  }
+  });
 
   // handle any network errors:
   tcpClient.on('error', function (err) {
@@ -109,7 +109,19 @@ function listenForClients(tcpClient) {
     console.error('client: ' + tcpClient.remoteAddress);
     tcpClient.end();
   });
-});
+
+
+  function checkClientList() {
+    console.log('cleaning up client list');
+    for (c in clients) {
+      if (typeof(client[c]) === 'undefined') {
+        var position = clients.indexOf(client); // get the client's position in the array
+        clients.splice(position, 1);            // delete it from the array
+      }
+    }
+  }
+
+  setInterval(checkClientList, 5000);
 }
 
 // this function runs if there's input from the keyboard.
