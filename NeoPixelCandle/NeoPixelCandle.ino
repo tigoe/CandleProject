@@ -35,7 +35,7 @@ boolean online = false;                  // whether the client is online
 
 void setup()  {
   mySerial.begin(9600);                  // initialize serial
-  //mySensor.set_CS_AutocaL_Millis(250);
+  mySensor.set_CS_Timeout_Millis(50);
   mySensor.set_CS_Timeout_Millis(50);
   strip.begin();                          // initialize pixel strip
   for (int pixel = 0; pixel < numPixels; pixel++) {
