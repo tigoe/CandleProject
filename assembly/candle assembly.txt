@@ -1,0 +1,35 @@
+
+
+Housing
+
+Spacer: laser cut plexi circle, 3/8", clear, same holes. spacer becomes drilling jug for tins. Always drill from outside of can to inside.
+
+* center hole, 0.25"
+* 2 holes either side of center, matching battery housing holes, 0.125"
+* 2 holes outside footprint of battery housing, 0.125"
+
+PCB
+
+right angle female headers for power, sensor electrode, and sensor ground. Sensor headers glue to pcb as needed to stabilise solder joint. Sensor headers should face edge of board. Power header should parallel edge of board.
+
+Wires
+
+Switch wires will attach to battery pack ground and power connector ground.
+
+power connector: Solder two male headers, 0.1" spacing. one connects to switch, the other to battery pack positive wire. Leave enough slack to connect/disconnect PCB for maintenance and battery changes. Shrink wrap solder joints.
+
+electrode connectors: Solder one end to 1 straight male header each, shrink wrap solder joints. Strip other ends of wires for wrapping around sensor bolt.
+
+Assembly
+
+1. Thread switch wires  through center hole.
+2. Mount battery pack  using nylon bolts through mounting holes. Fasten with nylon nuts. Tighten bolts and nuts.
+3. Wrap bare end of sensor electrode wire  around head of nylon sensor bolt. Then insert in one outer hole. Loosely fasten with metal nut.
+4. Thread sensor ground wire through remaining outer hole. Wrap bare end around sensor bolt underneath nut. With both wires wrapped around bolt, tighten bolt and nut.
+5. solder switch  to ends of switch wires. Shrink wrap ends if possible.
+6. glue or double stick tape switch to inside of bottom.
+7. attach power connector to PCB
+8. Insert batteries.
+9. attach PCB to center battery with double-stick tape.
+10. Insert candle tube into base
+11. Turn on
