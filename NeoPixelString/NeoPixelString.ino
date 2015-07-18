@@ -14,7 +14,7 @@
 YunClient client;             // connection to the server
 const int port = 8080;        // port for server communication
 char host[] = "192.168.1.3";
- 
+
 const int neoPixelPin = 3;    // pin that's controlling the neoPixels
 const int numPixels = 150;    // count of neoPixels
 
@@ -22,7 +22,9 @@ const int numPixels = 150;    // count of neoPixels
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_RGB + NEO_KHZ800);
 
 // changing range of keyframe colors for the pixels to flicker to:
-const unsigned long keyColors[] = {0xCB500F, 0xB4410C, 0x95230C, 0x853E0B};
+//const unsigned long keyColors[] = {0xCB500F, 0xB4410C, 0x95230C, 0x853E0B};
+const unsigned long keyColors[] = {0xAD300F, 0x98210C, 0x75230C, 0x653E0B};
+
 
 unsigned long targetColor[numPixels];    // next target for each pixel
 unsigned long pixelColor[numPixels];     // current color for each pixel
@@ -54,7 +56,7 @@ void setup()  {
   resetString(); // set the string with colors from the keyColors array
   strip.show();
   twinkleChase();  // run a twinkle through the whole string
-  login();         // log into the server
+  //login();         // log into the server
 }
 
 void loop() {
@@ -75,11 +77,16 @@ void loop() {
   // update the strip:
   strip.show();
 
-  if (!client.connected()) {
-    if (millis() % 1000 < 4) {    // can't use delay here since you're also fading pixels
-      login();
-    }
+  if (millis() % 2000 < 5) {
+
+    Console.println("heartbeat");
+
   }
+//  if (!client.connected()) {
+//    if (millis() % 1000 < 4) {    // can't use delay here since you're also fading pixels
+//      login();
+//    }
+//  }
 }
 
 /*
@@ -104,7 +111,7 @@ void readClient() {
       break;
     case 'x':    // turn off strip
       setStringColor(0x000000);
-        lightsOn = false;
+      lightsOn = false;
       break;
     default:  // placeholder for other options here
       break;
@@ -116,11 +123,10 @@ boolean login() {
   client.connect(host, port);
   delay(1000);
   while (!client.connected()) {
-    Serial.println("connection failed, trying again");
+    Console.println("connection failed, trying again");
     delay(2000);
     client.connect(host, port);
   }
-  Serial.print("!!!");      // tell the ATtiny that you're connected
   // This will send the IP address to the server
   client.println("Hello");
 }
