@@ -16,15 +16,14 @@ const int port = 8080;        // port for server communication
 char host[] = "192.168.1.3";
 
 const int neoPixelPin = 3;    // pin that's controlling the neoPixels
-const int numPixels = 150;    // count of neoPixels
+const int numPixels = 100;    // count of neoPixels
 
 // initialize neoPixel strip:
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, neoPixelPin, NEO_RGB + NEO_KHZ800);
 
 // changing range of keyframe colors for the pixels to flicker to:
-//const unsigned long keyColors[] = {0xCB500F, 0xB4410C, 0x95230C, 0x853E0B};
-const unsigned long keyColors[] = {0xAD300F, 0x98210C, 0x75230C, 0x653E0B};
-
+//unsigned long keyColors[] = {0xCB500F, 0xB4410C, 0x95230C, 0x853E0B};
+unsigned long keyColors[] = {0x3E0701, 0x3A0902, 0x2F0F02, 0x370E05};
 
 unsigned long targetColor[numPixels];    // next target for each pixel
 unsigned long pixelColor[numPixels];     // current color for each pixel
@@ -68,6 +67,7 @@ void loop() {
   // create the flicker effect:
   if (millis() % flickerInterval < 2 && lightsOn) {
     flickerPixels();
+     randomSeed(millis() + analogRead(A0));   // reset the randomseed
   }
 
   if (!online) {
@@ -166,8 +166,8 @@ void twinkleChase() {
 void resetString() {
   //  set the pixels with colors from the keyColors array:
   for (int pixel = 0; pixel < numPixels; pixel++) {
-    int thisColor = pixel % numColors;
-    pixelColor[pixel] = keyColors[thisColor]; // set the pixel color
+    //int thisColor = pixel % numColors;
+    pixelColor[pixel] = 0; //keyColors[thisColor]; // set the pixel color
     strip.setPixelColor(pixel, pixelColor[pixel]);  // set pixel using keyColor
   }
   strip.show();
