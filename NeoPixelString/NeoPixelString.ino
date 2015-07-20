@@ -9,11 +9,13 @@
 #include <Adafruit_NeoPixel.h>
 #include <Console.h>
 #include <YunClient.h>
+#include <Process.h>
 
 
 YunClient client;             // connection to the server
 const int port = 8080;        // port for server communication
 char host[] = "192.168.1.3";
+String macAddr = "00:00:00:00:00:00";
 
 const int neoPixelPin = 3;    // pin that's controlling the neoPixels
 const int numPixels = 100;    // count of neoPixels
@@ -40,6 +42,7 @@ void setup()  {
   Console.begin();  // initialize Console library (for debugging)
   strip.begin();    // initialize neoPixel strip
 
+
   randomSeed(millis() + analogRead(A0));
   unsigned long testColor = 0xFF0000;   // initial color is red
 
@@ -52,10 +55,11 @@ void setup()  {
     testColor = testColor >> 8;
   }
 
-  resetString(); // set the string with colors from the keyColors array
   strip.show();
   twinkleChase();  // run a twinkle through the whole string
-  //login();         // log into the server
+  resetString();
+  getMacAddress();
+  login();         // log into the server
 }
 
 void loop() {
@@ -67,7 +71,7 @@ void loop() {
   // create the flicker effect:
   if (millis() % flickerInterval < 2 && lightsOn) {
     flickerPixels();
-     randomSeed(millis() + analogRead(A0));   // reset the randomseed
+    randomSeed(millis() + analogRead(A0));   // reset the randomseed
   }
 
   if (!online) {
@@ -77,24 +81,20 @@ void loop() {
   // update the strip:
   strip.show();
 
-  if (millis() % 2000 < 5) {
-
-    Console.println("heartbeat");
-
+  if (millis() % 4000 < 5) {
+    if (!client.connected()) {
+      getMacAddress();
+      login();
+    }
   }
-//  if (!client.connected()) {
-//    if (millis() % 1000 < 4) {    // can't use delay here since you're also fading pixels
-//      login();
-//    }
-//  }
 }
 
 /*
-  this function reads serial input and interprets it
+  this function reads client input and interprets it
  */
 
 void readClient() {
-  char input = Console.read();
+  char input = client.read();
   switch (input) {
     case '*':    // do a twinkle
       twinkleChase();
@@ -103,35 +103,47 @@ void readClient() {
       online = true;
       break;
     case '~':    // set status to offline
+      client.stop();
       online = false;
-      break;
-    case 'i':    // initialize strip
-      lightsOn = true;
-      resetString();
-      break;
-    case 'x':    // turn off strip
-      setStringColor(0x000000);
-      lightsOn = false;
       break;
     default:  // placeholder for other options here
       break;
   }
 }
 
-
-boolean login() {
-  client.connect(host, port);
-  delay(1000);
-  while (!client.connected()) {
-    Console.println("connection failed, trying again");
-    delay(2000);
-    client.connect(host, port);
+void getMacAddress() {
+  Process getMac;
+  getMac.runShellCommand("ifconfig wlan0 | grep HWaddr");
+  while (getMac.running());
+  while (getMac.available()) {
+    String trash = getMac.readStringUntil('H');
+    trash = getMac.readStringUntil(' ');
+    macAddr = getMac.readStringUntil('\n');
   }
-  // This will send the IP address to the server
-  client.println("Hello");
+
 }
 
+boolean login() {
+  if (!client.connected()) {
+    online = false;
+    Console.println("connection failed, trying again");
+    client.connect(host, port);
+  }
+  if (client.connected() && online == false) {
+    // This will send the IP address to the server
+    client.println(macAddr);
+    online = true;
+  }
+}
 
+void resetString() {
+  //  set the pixels with colors from the keyColors array:
+  for (int pixel = 0; pixel < numPixels; pixel++) {
+    pixelColor[pixel] = 0;                           // set the pixel color
+    strip.setPixelColor(pixel, pixelColor[pixel]);  
+  }
+  strip.show();
+}
 
 /*
   this function creates the twinkle effect:
@@ -161,17 +173,6 @@ void twinkleChase() {
   }
 }
 
-
-
-void resetString() {
-  //  set the pixels with colors from the keyColors array:
-  for (int pixel = 0; pixel < numPixels; pixel++) {
-    //int thisColor = pixel % numColors;
-    pixelColor[pixel] = 0; //keyColors[thisColor]; // set the pixel color
-    strip.setPixelColor(pixel, pixelColor[pixel]);  // set pixel using keyColor
-  }
-  strip.show();
-}
 
 
 void setStringColor(unsigned long thisColor) {
