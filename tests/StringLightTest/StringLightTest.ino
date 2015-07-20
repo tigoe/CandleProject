@@ -1,19 +1,18 @@
 /*
-  Simple BlinkyStrip control
+  Web-based NeoPixel control
 
-  This sketch allows Console control over a BlinkyStrip.
-  To set any pixel in the strip, send the following Console string:
+  This sketch allows browser-based control over a BlinkyStrip.
+  To set all pixel in the strip, send the following HTTP request:
 
-  Cr,g,b
+  http://arduino.local/data/get/<color>/<value>
 
-  r, g, and b are ASCII numbers for the red, green, and blue brightness
-  levels, from 0 to 255.
 
-  This will probably work for any string of NeoPixels from Adafruit as well.
+  <color> is red, green, or blue <value> is a level from 0 to 255.
 
   Uses Adafruit's NeoPixel library: https://github.com/adafruit/Adafruit_NeoPixel
 
-  created 4 Dec 2014
+  created 18 Jul 2015
+  modified 20 Jul 2015
   by Tom Igoe
 
 */
@@ -36,12 +35,12 @@ void setup() {
   // initiate Bridge connection to linux processor:
   Bridge.begin();
   Console.begin();     // initialize Console communication
-  strip.begin();          // initialize pixel strip
-  strip.show();           // Initialize all pixels to 'off'
+  strip.begin();       // initialize pixel strip
+  strip.show();        // Initialize all pixels to 'off'
   Console.println("Hello");
   for (pixel = 0; pixel < numPixels; pixel++) {
     strip.setPixelColor(pixel, 0, 0, 0);// set the color for this pixel
-    strip.show();                                // refresh the strip
+    strip.show();                       // refresh the strip
   }
 }
 
