@@ -12,7 +12,7 @@ by Tom Igoe
 var express = require('express');	// include express.js
 io = require('socket.io'),				// include socket.io
 dgram = require('dgram'),
-//net = require('net'),             // include the net library
+getMac = require('getmac'),
 app = express(),									// make an instance of express.js
 webServer = app.listen(8000),			// start a web server with the express instance
 webSocketServer = io(webServer);	// make a webSocket server using the express server
@@ -74,8 +74,13 @@ udpServer.on('listening', function () {
 
 udpServer.on('message', function (message, remote) {
   console.log(remote.address + ':' + remote.port +' - ' + message);
-  checkForNewClient(remote.address, remote.port);
-  sendPacket(remote.address, remote.port, 'Hello candle!');
+  if (getMac.isMac(message)) {
+    console.log('client sent a MAC address: ' + message);
+    checkForNewClient(remote.address, remote.port, message);
+    sendPacket(remote.address, remote.port, 'Hello candle!');
+  } else {
+    broadcast(message);
+  }
 });
 
 
@@ -88,20 +93,21 @@ function sendPacket(address, port, data) {
   });
 }
 
-function checkForNewClient(ip, port) {
+function checkForNewClient(ip, port, mac) {
   var isNewClient = true;
-// make a new JSON object with this data:
+  // make a new JSON object with this data:
   var newClient = {
     'address': ip,
-    'port': port
+    'port': port,
+    'macAddress' : mac
   };
-// see if the client IP address matches one in the list:
+  // see if the client IP address matches one in the list:
   for (thisClient in clients) {
     if (clients[thisClient].address === newClient.address ) {
       isNewClient = false;
     }
   }
-// if this is a new client, add it to the client list:
+  // if this is a new client, add it to the client list:
   if (isNewClient) {
     clients.push(newClient);
   }
