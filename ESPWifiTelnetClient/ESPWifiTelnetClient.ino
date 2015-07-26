@@ -80,15 +80,16 @@ boolean login() {
     delay(2000);
     client.connect(host, port);
   }
-  Serial.print("!!!");      // tell the ATtiny that you're connected
+  Serial.print("!!!");      // tell the ATtiny that you're connected 
+ 
 
   // This will send the MAC address to the server:
   WiFi.macAddress(mac);             //get your MAC address
   String macAddr;                   // a string to convert it for sending
-  for (int i = 5; i > 0; i--) {     // iterate over the MAC address
+  for (int i = 0; i < 5; i++) {     // iterate over the MAC address
     macAddr += String(mac[i], HEX); // get the byte, convert to hex string
     macAddr += ":";                 // add a :
   }
-  macAddr += mac[0];               // add the final byte
+  macAddr += String(mac[5], HEX);               // add the final byte
   client.println(macAddr);         // send it to the client
 }
