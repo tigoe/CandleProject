@@ -44,3 +44,5 @@ circuit/candle_circuit.TXT
 ESPWifiTelnetClient/settings.h
 
 ESPWifiUDPClient/settings.h
+
+tests/nodeUDPTest/udpServer.js
