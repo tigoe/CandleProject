@@ -3,7 +3,7 @@
   This sketch makes three NeoPixels fade in a candle-like behavior.
 
   created 26 Jun 2015
-  modified 10 Jul 2015
+  modified 24 Jul 2015
   by Tom Igoe
 
  */
@@ -28,11 +28,14 @@ unsigned long pixelColor[numPixels];     // current color for each pixel
 
 // count of keyframe colors:
 int numColors = sizeof(keyColors) / 4;
-int flickerInterval = 30;                // in millis, the delay between flicker steps
-int threshold = 500;                    // difference threshold for sensor
-long lastTwinkle = 0;                    // how long since the last twinkle
-boolean online = false;                  // whether the client is online
-
+boolean online = false;       // whether the client is online
+int flickerInterval = 30;     // in millis, the delay between flicker steps
+int threshold = 500;          // difference threshold for sensor
+int sensingInterval = 250;    // time between local candle twinkles
+int networkInterval = 1500;   // time between twinkle messages to the network
+long lastTwinkle = 0;         // how long since the last local twinkle
+long lastNetworkTwinkle = 0;  // how long since the last network twinkle   
+      
 void setup()  {
   mySerial.begin(9600);                  // initialize serial
   mySensor.set_CS_Timeout_Millis(50);
@@ -62,11 +65,14 @@ void loop() {
   }
 
   // read sensor every half second:
-  if (millis() - lastTwinkle > 250) {       // disable the sensor after a sensing event happens
+  if (millis() - lastTwinkle > sensingInterval) {       // disable the sensor after a sensing event happens
     long touch =  mySensor.capacitiveSensor(15);
     if (touch > threshold) {
-      mySerial.print(touch);
-      mySerial.print(" *");
+      // if the minimum network interval has passed:
+      if (millis() - lastNetworkTwinkle > networkInterval) {
+        mySerial.print("*");
+        lastNetworkTwinkle = millis();
+      }
       twinkle();
     }
   }
