@@ -42,3 +42,5 @@ circuit/candle_circuit.cmp
 circuit/candle_circuit.TXT
 
 ESPWifiTelnetClient/settings.h
+
+ESPWifiUDPClient/settings.h
