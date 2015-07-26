@@ -46,3 +46,5 @@ ESPWifiTelnetClient/settings.h
 ESPWifiUDPClient/settings.h
 
 tests/nodeUDPTest/udpServer.js
+
+node_modules/*
