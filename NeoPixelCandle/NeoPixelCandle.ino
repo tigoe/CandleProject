@@ -32,7 +32,7 @@ boolean online = false;       // whether the client is online
 int flickerInterval = 30;     // in millis, the delay between flicker steps
 int threshold = 500;          // difference threshold for sensor
 int sensingInterval = 250;    // time between local candle twinkles
-int networkInterval = 1500;   // time between twinkle messages to the network
+int networkInterval = 1000;   // time between twinkle messages to the network
 long lastTwinkle = 0;         // how long since the last local twinkle
 long lastNetworkTwinkle = 0;  // how long since the last network twinkle   
       
