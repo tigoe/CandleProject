@@ -77,14 +77,13 @@ void loop() {
     Udp.println(line);
     Udp.endPacket();
   }
-// if you've never gotten a server message,
-// continue to try to login every ten seconds:
+  // if you're not online, continue to try to login every ten seconds:
   if (!online && (millis() - lastLogin > loginInterval)) {
     login();
   }
 
-  // if you haven't gotten a server message in ten minutes, assume
-  // the server's offline and let the candle controller know:
+  // if you're online and  haven't gotten a server message in ten minutes, 
+  // assume the server's offline and let the candle controller know:
   if (online && millis() - lastNetworkMsg > tenMinutes) {
     Serial.println("~~~");
     login();
