@@ -34,8 +34,8 @@ int threshold = 500;          // difference threshold for sensor
 int sensingInterval = 250;    // time between local candle twinkles
 int networkInterval = 1000;   // time between twinkle messages to the network
 long lastTwinkle = 0;         // how long since the last local twinkle
-long lastNetworkTwinkle = 0;  // how long since the last network twinkle   
-      
+long lastNetworkTwinkle = 0;  // how long since the last network twinkle
+
 void setup()  {
   mySerial.begin(9600);                  // initialize serial
   mySensor.set_CS_Timeout_Millis(50);
