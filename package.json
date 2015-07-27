@@ -1,0 +1,34 @@
+{
+  "name": "candleServerUDP",
+  "version": "0.1.0",
+  "description": "A UDP server for networked candle devices",
+  "main": "candleServerUDP.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "express": "^4.13.0",
+    "socket.io": "^1.3.5",
+    "getmac": "^1.0.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tigoe/CandleProject.git"
+  },
+  "keywords": [
+    "node",
+    "esp8266",
+    "yun",
+    "arduino"
+  ],
+  "author": "Tom Igoe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tigoe/CandleProject/issues"
+  },
+  "homepage": "https://github.com/tigoe/CandleProject"
+}
