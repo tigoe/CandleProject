@@ -73,11 +73,11 @@ udpServer.on('listening', function () {
 });
 
 udpServer.on('message', function (message, remote) {
-  console.log(remote.address + ':' + remote.port +' - ' + message);
+  console.log(new Date() + " " + remote.address + ':' + remote.port +' - ' + message);
   if (getMac.isMac(message)) {
     console.log('client sent a MAC address: ' + message);
-    checkForNewClient(remote.address, remote.port, message);
-    sendPacket(remote.address, remote.port, 'Hello candle!');
+    checkForNewClient(remote.address, 8888, message);
+    sendPacket(remote.address, 8888, 'Hello!');
   } else {
     broadcast(message);
   }
