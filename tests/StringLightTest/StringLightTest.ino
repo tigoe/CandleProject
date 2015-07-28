@@ -21,9 +21,9 @@
 #include <Console.h>
 
 #define PIN 3
-const int numPixels = 50;
+const int numPixels = 100;
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(numPixels, PIN, NEO_RGB + NEO_KHZ800);
 
 char dataBuffer[4];      // buffer for receiving the data. You need an extra byte at the end, so 4 bytes to get 3
 int red, green, blue;    // ints to set the LED brightnesses
