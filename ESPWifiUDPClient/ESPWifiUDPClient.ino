@@ -10,7 +10,7 @@
   char host[] = "192.168.0.2";  // the IP address of the device running the server
 
   created 26 Jun 2015
-  modified 20 Jul 2015
+  modified 28 Jul 2015
   by Tom Igoe
 
  */
@@ -25,8 +25,8 @@ WiFiUDP Udp;
 
 const int port = 8888;
 byte mac[6];
-long tenMinutes = 1000 * 60 * 10;
-int loginInterval = 10 * 1000;
+long tenMinutes = 600000;
+int loginInterval = 10000;
 long lastNetworkMsg = 0;
 long lastLogin = 0;
 boolean online = false;
@@ -57,6 +57,8 @@ void setup() {
 
 
 void loop() {
+  long currentTime = millis();
+
   // if there's data available, read a packet
   int packetSize = Udp.parsePacket();
   if (packetSize) {
@@ -77,23 +79,23 @@ void loop() {
     Udp.println(line);
     Udp.endPacket();
   }
-  // if you're not online, continue to try to login every ten seconds:
-  if (!online && (millis() - lastLogin > loginInterval)) {
-    login();
-  }
 
-  // if you're online and  haven't gotten a server message in ten minutes, 
-  // assume the server's offline and let the candle controller know:
-  if (online && millis() - lastNetworkMsg > tenMinutes) {
-    Serial.println("~~~");
-    login();
-    online = false;
+  if (online == false) {
+    // attempt to log in:
+    if (currentTime - lastLogin > loginInterval) {
+      login();
+    }
+  } else {
+    // if you're online and  haven't gotten a server message in ten minutes,
+    // assume the server's offline and let the candle controller know:
+    if (currentTime - lastNetworkMsg >= tenMinutes) {
+      Serial.println("~~~");
+      online = false;
+    }
   }
 }
 
-
 boolean login() {
-  Serial.println("logging in...");
   Udp.begin(port);
   // This will send the MAC address to the server:
   WiFi.macAddress(mac);             //get your MAC address
