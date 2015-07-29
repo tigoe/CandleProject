@@ -96,14 +96,21 @@ void loop() {
 }
 
 boolean login() {
+  Serial.println("logging in");
   Udp.begin(port);
   // This will send the MAC address to the server:
   WiFi.macAddress(mac);             //get your MAC address
   String macAddr;                   // a string to convert it for sending
   for (int i = 0; i < 5; i++) {     // iterate over the MAC address
+    if (mac[i] < 0x10) {            // add a leading 0 to single-digit hex numbers
+      macAddr += "0";
+    }
     macAddr += String(mac[i], HEX); // get the byte, convert to hex string
     macAddr += ":";                 // add a :
   }
+   if (mac[5] < 0x10) {             // add a leading 0 to single-digit hex numbers
+      macAddr += "0";
+    }
   macAddr += String(mac[5], HEX);               // add the final byte
 
   // send the MAC address to the server by way of greeting:

@@ -1,11 +1,11 @@
 /*
 candleServerUDP.js
 
-A combination web server, webSocket server, and TCP socket server in node.js.
-Keeps track of clients in an array. Typing 'c' will print the array of clients
+A combination web server, webSocket server, and UDP socket server in node.js.
+Keeps track of clients in an array. Typing 'c' will print the array of clients.
 
 created 27 Jun 2015
-modified 10 Jul 2015
+modified 28 Jul 2015
 by Tom Igoe
 */
 
@@ -27,7 +27,10 @@ input = '';               // input string from the keyboard (STDIN)
 //var tcpServer = net.createServer(listenForClients);  // create the server
 //tcpServer.listen(8080);           // start the TCP socket server listening
 var udpServer = dgram.createSocket('udp4');
-udpServer.bind(8888);
+udpServer.bind(8888, function() {
+    udpServer.setBroadcast(true);
+});
+
 
 var stdin = process.openStdin();    // enable input from the keyboard
 stdin.setEncoding('utf8');          // encode everything typed as a string
@@ -47,7 +50,7 @@ function openSocket(webSocket){
   webSocket.on('message', function(data) {
     // doing something here
     console.log(data);
-    broadcast(data);
+    sendAll(data);
   });
 
   webSocket.on('disconnect', function() {
@@ -59,10 +62,22 @@ function openSocket(webSocket){
 // you need to hit enter to generate this event.
 stdin.on('data', function(data) {
   data = data.trim();                 // trim any whitespace from the string
+  switch (data) {
+    case 'c':
+      console.log(clients);             // list the client array
+      break;
+    case '~':
+      broadcast('~~~');
+      break;
+    case '!':
+      broadcast('!!!');
+      break;
+    default:
+      sendAll(data);                  // otherwise, send the message to all clients
+      break;
+  }
   if (data === 'c') {
-    console.log(clients);             // list the client array
   } else {
-    broadcast(data);                  // otherwise, broadcast the message to all clients
   }
 });
 
@@ -79,7 +94,7 @@ udpServer.on('message', function (message, remote) {
     checkForNewClient(remote.address, 8888, message);
     sendPacket(remote.address, 8888, 'Hello!');
   } else {
-    broadcast(message);
+    sendAll(message);
   }
 });
 
@@ -87,8 +102,11 @@ udpServer.on('message', function (message, remote) {
 function sendPacket(address, port, data) {
   var client = dgram.createSocket('udp4');
   client.send(data, 0, data.length, port, address, function(error, bytes) {
-    if (error) throw error;
-    //console.log('UDP message sent to ' + address +':'+ port);
+    if (error) {
+      //throw error;
+      console.log("error: " + error);
+    }
+
     client.close();
   });
 }
@@ -113,9 +131,13 @@ function checkForNewClient(ip, port, mac) {
   }
 }
 
-// this function broadcasts data to all UDP clients.
-function broadcast(data) {
+// this function sendAlls data to all UDP clients.
+function sendAll(data) {
   for (thisClient in clients) {     // iterate over the client array
     sendPacket(clients[thisClient].address, clients[thisClient].port, data);
   }
+}
+
+function broadcast(data) {
+    sendPacket('192.168.1.255', 8888, data);
 }

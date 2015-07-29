@@ -14,7 +14,7 @@
 String macAddr = "00:00:00:00:00:00";
 char bridgeData[10];
 long tenMinutes = 600000;
-long loginInterval = 10 * 1000;
+long loginInterval = 10000;
 long lastNetworkMsg = 0;
 long lastLogin = 0;
 Process udpBridge;
@@ -188,8 +188,6 @@ void twinkleChase() {
     delay(10);
   }
 }
-
-
 
 void setStringColor(unsigned long thisColor) {
   //  set the pixels with colors from the keyColors array:
