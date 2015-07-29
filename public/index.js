@@ -31,7 +31,7 @@ var app = {
   },
 
   getClients: function() {
-    $.get('/clients', function(data){
+    $.getJSON('/clients', function(data){
       app.showClients(data);
     });
   },
@@ -42,14 +42,13 @@ var app = {
     });
   },
 
-  showClients: function(clientList) {
-    clients.innerHTML = 'Clients: <br>' + clientList;
+  showClients: function(data) {
+    clients.innerHTML = 'Clients: <br>' + JSON.stringify(data);
   },
 
   showMessage: function(message) {
     var messageDiv = document.getElementById('messageDiv');
-    console.log(message);
-      messageDiv.innerHTML = message;
+    messageDiv.innerHTML = message;
   }
 }
 

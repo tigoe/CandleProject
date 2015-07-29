@@ -33,9 +33,7 @@ UDP_PORT = 8888,           // all UDP transactions will be on 8888
 input = '';               // input string from the keyboard (STDIN)
 
 var udpServer = dgram.createSocket('udp4');
-udpServer.bind(UDP_PORT, function() {
-  udpServer.setBroadcast(true);
-});
+udpServer.bind(UDP_PORT);
 
 var stdin = process.openStdin();    // enable input from the keyboard
 stdin.setEncoding('utf8');          // encode everything typed as a string
@@ -119,6 +117,7 @@ udpServer.on('message', function (message, remote) {
     console.log('Client sent login message');
     // convert byte array to string:
     messageString = String.fromCharCode.apply(null, new Uint8Array(message));
+    messageString = messageString.trim();
     checkForNewClient(remote.address, messageString);
     sendPacket(remote.address, 'Hello!');
   } else {
@@ -175,7 +174,7 @@ function cleanClientList() {
 
 function logMessageTime(thisAddress) {
   for (thisClient in clients) {
-    if (clients[thisClient].ip === thisAddress ) {
+    if (clients[thisClient].address === thisAddress ) {
       clients[thisClient].lastMessageTime = new Date();
     }
   }
@@ -189,5 +188,7 @@ function sendAll(data) {
 }
 
 function broadcast(data) {
-  sendPacket('192.168.0.255', data);
+  for (b=3; b<254; b++){
+    sendPacket('192.168.43.' + b, data);
+  }
 }
