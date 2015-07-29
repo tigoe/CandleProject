@@ -23,11 +23,11 @@ app.get('/:name', serveFiles);							  // listener for all static file requests
 webSocketServer.on('connection', openSocket);	// listener for websocket data
 
 var clients = new Array,  // array to track TCP clients when they connect
+UDP_PORT = 8888,           // all UDP transactions will be on 8888
 input = '';               // input string from the keyboard (STDIN)
-//var tcpServer = net.createServer(listenForClients);  // create the server
-//tcpServer.listen(8080);           // start the TCP socket server listening
+
 var udpServer = dgram.createSocket('udp4');
-udpServer.bind(8888, function() {
+udpServer.bind(udpPort, function() {
     udpServer.setBroadcast(true);
 });
 
@@ -43,14 +43,14 @@ function serveFiles(request, response) {
 
 // open a webSocket in response to a client request:
 function openSocket(webSocket){
-  console.log('new user address: ' + webSocket.handshake.address);
+  console.log('new websocket user address: ' + webSocket.handshake.address);
   // send something to the web client with the data:
   webSocket.emit('message', 'Hello, ' + webSocket.handshake.address);
   // this function runs if there's input from the web client:
   webSocket.on('message', function(data) {
     // doing something here
     console.log(data);
-    sendAll(data);
+    //sendAll(data);
   });
 
   webSocket.on('disconnect', function() {
@@ -61,10 +61,10 @@ function openSocket(webSocket){
 // this function runs if there's input from the keyboard.
 // you need to hit enter to generate this event.
 stdin.on('data', function(data) {
-  data = data.trim();                 // trim any whitespace from the string
+  data = data.trim();       // trim any whitespace from the string
   switch (data) {
     case 'c':
-      console.log(clients);             // list the client array
+      console.log(clients); // list the client array
       break;
     case '~':
       broadcast('~~~');
@@ -73,7 +73,7 @@ stdin.on('data', function(data) {
       broadcast('!!!');
       break;
     default:
-      sendAll(data);                  // otherwise, send the message to all clients
+      sendAll(data);        // send the message to all clients
       break;
   }
   if (data === 'c') {
@@ -90,18 +90,19 @@ udpServer.on('listening', function () {
 udpServer.on('message', function (message, remote) {
   console.log(new Date() + " " + remote.address + ':' + remote.port +' - ' + message);
   if (getMac.isMac(message)) {
-    console.log('client sent a MAC address: ' + message);
-    checkForNewClient(remote.address, 8888, message);
-    sendPacket(remote.address, 8888, 'Hello!');
+    console.log('Client sent login message');
+    // convert byte array to string:
+    messageString = String.fromCharCode.apply(null, new Uint8Array(message));
+    checkForNewClient(remote.address, messageString);
+    sendPacket(remote.address, 'Hello!');
   } else {
     sendAll(message);
   }
 });
 
-
-function sendPacket(address, port, data) {
+function sendPacket(address, data) {
   var client = dgram.createSocket('udp4');
-  client.send(data, 0, data.length, port, address, function(error, bytes) {
+  client.send(data, 0, data.length, UDP_PORT, address, function(error, bytes) {
     if (error) {
       //throw error;
       console.log("error: " + error);
@@ -116,12 +117,11 @@ function checkForNewClient(ip, port, mac) {
   // make a new JSON object with this data:
   var newClient = {
     'address': ip,
-    'port': port,
     'macAddress' : mac
   };
-  // see if the client IP address matches one in the list:
+  // see if the client MAC address matches one in the list:
   for (thisClient in clients) {
-    if (clients[thisClient].address === newClient.address ) {
+    if (clients[thisClient].mac === newClient.mac ) {
       isNewClient = false;
     }
   }
@@ -134,10 +134,10 @@ function checkForNewClient(ip, port, mac) {
 // this function sendAlls data to all UDP clients.
 function sendAll(data) {
   for (thisClient in clients) {     // iterate over the client array
-    sendPacket(clients[thisClient].address, clients[thisClient].port, data);
+    sendPacket(clients[thisClient].address, UDP_PORT, data);
   }
 }
 
 function broadcast(data) {
-    sendPacket('192.168.1.255', 8888, data);
+    sendPacket('192.168.1.255', UDP_PORT, data);
 }
