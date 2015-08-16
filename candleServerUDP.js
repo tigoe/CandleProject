@@ -1,103 +1,94 @@
 /*
 candleServerUDP.js
 
-A combination web server  and UDP socket server in node.js.
+A combination web server and UDP socket server in node.js.
 
 created 27 Jun 2015
 modified 29 Jul 2015
 by Tom Igoe
 */
 
-var express = require('express');	// include express.js
-dgram = require('dgram'),
-getMac = require('getmac'),
-app = express(),									// make an instance of express.js
-webServer = app.listen(8000),			// start a web server with the express instance
+var express = require('express'),	    // include express.js
+  dgram = require('dgram'),           // include UDP datagram functions
+  getMac = require('getmac'),         // include getmac
+  app = express();							      // make an instance of express.js
 
-//  set up server and webSocketServer listener functions:
-app.use(express.static('public'));					  // serve files from the public folder
-app.get('/files/:name', serveFiles);							  // listener for all static file requests
-// need to define other routes here:
-app.get('/login/', loginAll);
-app.get('/logout/', logoutAll);
-app.get('/clients/', listClients);
-app.get('/burst/', burstAll);
+// start a web server with the express instance:
+app.listen(8000, function() {
+  console.log(new Date() + '\tweb server listening on port 8000');
+});
 
-//    list current clients
-//    send message to a client
-//    send a broadcast message
-//    check a given client's data
+app.use(express.static('public'));	  // serve files from the public folder
+app.get('/files/:name', serveFiles);  // route for all static file requests
+app.get('/clients/', listClients);    // route for client list request
+app.get('/send/:action/:target', remoteCommand);  // route for all remote actions
 
-var clients = new Array,  // array to track TCP clients when they connect
-UDP_PORT = 8888,           // all UDP transactions will be on 8888
-input = '';               // input string from the keyboard (STDIN)
+var clients = new Array,              // array to track UDP clients when they connect
+  UDP_PORT = 8888;                    // all UDP transactions will be on 8888
 
-var udpServer = dgram.createSocket('udp4');
-udpServer.bind(UDP_PORT);
+var udpServer = dgram.createSocket('udp4'); // create UDP socket
+udpServer.bind(UDP_PORT);                   // bind the socket server to a port number
 
-var stdin = process.openStdin();    // enable input from the keyboard
-stdin.setEncoding('utf8');          // encode everything typed as a string
+var stdin = process.openStdin(),      // enable input from the keyboard
+input = '';                           // input string from the keyboard (STDIN)
+stdin.setEncoding('utf8');            // encode everything typed as a string
 
 // serve web files from /public directory:
 function serveFiles(request, response) {
-  var fileName = request.params.name;				// get the file name from the request
-  var options = {							// options for serving files
-    root: __dirname + '/public/'		// root is the /public directory in the app directory
+  var fileName = request.params.name;	 // get the file name from the request
+  var options = {							         // options for serving files
+    root: __dirname + '/public/'		   // root is the /public directory in the app directory
   };
-  // if there's an error sending a file, this function
-  // will be called:
-  function fileError(error) {
-    if (error) {								// if there's an error
-    response.status(error.status)		// and send a HTTP 404 status message
-    response.end();						// and close the connection
+  response.sendFile(fileName, options); // send the file
+}
+
+// send the UDP client list to a web client:
+function listClients(request, response){
+  response.send(clients);
+  response.end();
+}
+
+// send a web client's command to one or all UDP clients.
+// request looks like this: /send/:action/:target
+function remoteCommand(request, response){
+  console.log(new Date() + '\tweb request: send '
+      + request.params.action
+      + ' to ' + request.params.target);
+
+  var message;        // message for UDP clients
+  switch(request.params.action) {
+    case 'login':     // login generates !!!
+    message = "!!!";
+    break;
+    case 'logout':    // logout generates ~~~
+    message = "~~~";
+    break;
+    case 'burst':     // burst generates *
+    message = "*";
+    break;
   }
 
-  response.sendFile(fileName, options, fileError);							// send the file
-}
-}
+  // if the web client sends 'all' as the target, broadcast to all UDP clients:
+  if (request.params.target === 'all') {
+    broadcast(message);
+    // if the web client sends an IP address as the target, send to that address:
+  } else {
+    sendPacket(request.params.target, message);
+  }
 
-function listClients(request, response){
-  var content = clients;
+  // reply to web client:
+  var content = 'message: ' + message + ' sent to: ' + request.params.target;
   response.send(content);
   response.end();
 }
-
-function loginAll(request, response){
-  var content = "logged in all";
-  broadcast('!!!');
-  response.send(content);
-  response.end();
-}
-
-function logoutAll(request, response){
-  var content = "logged out all";
-  broadcast('~~~');
-  response.send(content);
-  response.end();
-}
-
-function burstAll(request, response){
-  var content = "burst all";
-  broadcast('*');
-  response.send(content);
-  response.end();
-}
-
-
 
 // this function runs if there's input from the keyboard.
 // you need to hit enter to generate this event.
 stdin.on('data', function(data) {
-  data = data.trim();       // trim any whitespace from the string
+  data = data.trim();     // trim any whitespace from the string
   switch (data) {
     case 'c':
-    console.log(clients); // list the client array
-    break;
-    case '~':
-    broadcast('~~~');
-    break;
-    case '!':
-    broadcast('!!!');
+    console.log(new Date() + '\t' + JSON.stringify(clients, null, 2)); // list the client array
     break;
     default:
     sendAll(data);        // send the message to all clients
@@ -105,21 +96,24 @@ stdin.on('data', function(data) {
   }
 });
 
+// event handlers for UDP server:
+
+// runs when UDP server is up and running:
 udpServer.on('listening', function () {
   var address = udpServer.address();
-  console.log('UDP Server listening on ' + address.address + ":" + address.port);
+  udpServer.setBroadcast(true);
+  console.log(new Date() + '\tUDP Server listening on ' + address.address + ":" + address.port);
 });
 
+// runs when a UDP packet arrives:
 udpServer.on('message', function (message, remote) {
-  console.log(new Date() + " " + remote.address + ':' + remote.port +' - ' + message);
-
+  console.log(new Date() + '\t' + remote.address + ':' + remote.port +'\t' + message);
   if (getMac.isMac(message)) {
-    console.log('Client sent login message');
     // convert byte array to string:
     messageString = String.fromCharCode.apply(null, new Uint8Array(message));
     messageString = messageString.trim();
     checkForNewClient(remote.address, messageString);
-    sendPacket(remote.address, 'Hello!');
+    sendPacket(remote.address, 'Hello!!!');
   } else {
     sendAll(message);
   }
@@ -132,7 +126,7 @@ function sendPacket(address, data) {
   client.send(data, 0, data.length, UDP_PORT, address, function(error, bytes) {
     if (error) {
       //throw error;
-      console.log("error: " + error);
+      console.log(new Date() + '\terror: ' + error);
     }
     client.close();
   });
@@ -147,7 +141,7 @@ function checkForNewClient(ip, mac) {
   };
   // see if the client IP address matches one in the list:
   for (thisClient in clients) {
-    if (clients[thisClient].ip === newClient.ip ) {
+    if (clients[thisClient].address === newClient.address ) {
       isNewClient = false;
     }
   }
@@ -162,12 +156,13 @@ function cleanClientList() {
   var interval, clientTime;
   for (thisClient in clients) {
     clientTime = clients[thisClient].lastMessageTime;
-    interval = Date.parse(now)/1000 - Date.parse(clientTime)/1000;
+    interval = (Date.parse(now)/1000) - (Date.parse(clientTime)/1000);
+    console.log("cleanup:  interval = " + interval );
     if (interval > 600) { // ten minutes
       // send a logout:
       sendPacket(clients[thisClient].address, UDP_PORT, '~~~');
       // remove the client from the array:
-      clients.splice(thisClient, 1);            // delete it from the array
+      clients.splice(thisClient, 1);
     }
   }
 }
@@ -188,7 +183,8 @@ function sendAll(data) {
 }
 
 function broadcast(data) {
-  for (b=3; b<254; b++){
-    sendPacket('192.168.43.' + b, data);
-  }
+  console.log('broadcast');
+   for (b=3; b<20; b++){
+     sendPacket('192.168.1.' + b, data);
+   }
 }

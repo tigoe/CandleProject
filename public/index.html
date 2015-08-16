@@ -2,23 +2,20 @@
 <html>
   <head>
     <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="index.css">
     <script type="text/javascript" src="zepto.min.js"></script>
     <title></title>
   </head>
   <body>
     <div id="buttons">
-      <button type="button" id="login">login all</button>
-      <button type="button" id="logout">logout all</button>
-      <button type="button" id="burst">burst all</button>
-        <button type="button" id="clientButton">refresh Clients</button>
+      Send to all clients:<br>
+      <button type="button" id="login" name="all">login</button>
+      <button type="button" id="logout" name="all">logout</button>
+      <button type="button" id="burst" name="all">burst</button>
+      <button type="button" id="clientButton">refresh list</button>
     </div>
-    <div id="clients">
-      Client list
-    </div>
-    <div id="messageDiv">
-      messages
-    </div>
-    <script type="text/javascript" src="index.js"></script>
-    
+    <div id="messageDiv"></div>
+    <div id="clientDiv"></div>
+      <script type="text/javascript" src="index.js"></script>
   </body>
 </html>

@@ -1,0 +1,26 @@
+body{
+  font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+}
+
+div {
+  padding: 5px;
+  width: 600px;
+  height:90px;
+}
+
+button{
+  width: 70px;
+  height: 25px;
+  margin: 5px;
+  padding: 5px;
+}
+
+#messageDiv{
+  font-weight: bold;
+  height: 25px;
+}
+
+#buttons{
+  height: 45px;
+}
