@@ -2,7 +2,7 @@
   This sketch makes 100 NeoPixels fade in a candle-like behavior.
 
   created 15 Jun 2015
-  modified 28 Jun 2015
+  modified 16 Jul 2015
   by Tom Igoe
 
  */
@@ -41,8 +41,8 @@ boolean lightsOn = true;                 // whether the string's on or not
 
 void setup()  {
   Bridge.begin();   // initialize Bridge library
-  Serial.begin(9600);  // initialize Console library (for debugging)
-  Serial.println("Starting");
+  Console.begin();  // initialize Console library (for debugging)
+  Console.println("Starting");
   strip.begin();    // initialize neoPixel strip
   // might be able to do this on Yun startup:
   udpBridge.runShellCommandAsynchronously("python /usr/lib/python2.7/bridge/udpBridge.py");
@@ -87,7 +87,7 @@ void loop() {
     // if you're online and  haven't gotten a server message in ten minutes,
     // assume the server's offline and let the candle controller know:
     if (currentTime - lastNetworkMsg >= tenMinutes) {
-      Serial.println("~~~");
+      Console.println("~~~");
       online = false;
     }
   }
@@ -106,11 +106,11 @@ void readClient() {
   if (result.length() > 0) {
     for (int c = 0; c < result.length(); c++) { // read all bytes of bridgeData
       char input = result[c];
-      Serial.print(input);
+      Console.print(input);
       switch (input) {
         case '*':    // do a twinkle
           twinkleChase();
-          Serial.println("twinkle");
+          Console.println("twinkle");
           lastNetworkMsg = millis();
           break;
         case '!':    // set status to online
@@ -150,7 +150,7 @@ void sendPacket(String message) {
 }
 
 boolean login() {
-  Serial.println("logging in...");
+  Console.println("logging in...");
   getMacAddress();
   // send the MAC address to the server by way of greeting:
   sendPacket(macAddr);
@@ -179,7 +179,7 @@ void twinkleChase() {
     }
 
     strip.setPixelColor(pixel, burstColor);  // turn pixel white
-    for (int n = 0; n < 3; n++) {
+    for (int n = 0; n < 9; n++) {            // light nine pixels at a time
       if (pixel + n < numPixels) {
         strip.setPixelColor(pixel + n, burstColor); // turn pixel white
       }
