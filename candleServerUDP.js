@@ -123,13 +123,14 @@ udpServer.on('message', function (message, remote) {
 
 function sendPacket(address, data) {
   var client = dgram.createSocket('udp4');
-  client.send(data, 0, data.length, UDP_PORT, address, function(error, bytes) {
-    if (error) {
-      //throw error;
-      console.log(new Date() + '\terror: ' + error);
-    }
-    client.close();
-  });
+    client.send(data, 0, data.length, UDP_PORT, address, function(error, bytes) {
+      if (error) {
+        //throw error;
+        console.log(new Date() + '\terror: ' + error);
+      }
+      client.close();
+    });
+
 }
 
 function checkForNewClient(ip, mac) {
@@ -185,6 +186,6 @@ function sendAll(data) {
 function broadcast(data) {
   console.log('broadcast');
    for (b=3; b<20; b++){
-     sendPacket('192.168.1.' + b, data);
+     sendPacket('192.168.0.' + b, data);
    }
 }
