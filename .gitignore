@@ -50,3 +50,4 @@ tests/nodeUDPTest/udpServer.js
 node_modules/*
 
 ESPUdpAPCandle/settings.h
+ESPUdpAPCandle/arduino_secrets.h

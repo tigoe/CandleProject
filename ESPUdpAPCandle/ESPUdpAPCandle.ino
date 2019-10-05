@@ -1,13 +1,27 @@
+/*
+ ESP UDP AP candle
 
+ This is a variant on the ESP8266 firmware for the candles.
+ This variant makes the ESP8266 into an access point. 
+ arduino_secrets.h shouls contain the SSID name and password
+ as SECRET_SSID and SECRET_PASSWORD
+
+ currently does not compile. Committing this to work on other machine.
+ -tigoe 10/5/2019
+ modified 5 Oct 2019
+ by Tom Igoe
+ */
+ 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
-#include "settings.h"
+#include "arduino_secrets.h"
+
 
 WiFiUDP Udp;
-IPAddress ip(192, 168, 1, 2);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress ip(192, 168, 0, 2);
+IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
-IPAddress clients[6];
+IPAddress clients[30];
 
 
 const int port = 8888;
@@ -21,12 +35,12 @@ void setup() {
   Serial.setTimeout(10);
   Udp.setTimeout(10);
   Serial.print("Setting up access point");
-  WiFi.softAP(ssid, password);
+  WiFi.softAP(SECRET_SSID, SECRET_PASS);
 
   WiFi.softAPConfig(ip, gateway, subnet);
   Udp.begin(port);
   Serial.print("Connect to Wifi SSID: ");
-  Serial.println(ssid);
+  Serial.println(SECRET_SSID);
   Serial.print("then telnet to IP address: ");
   Serial.println(ip);
 }
@@ -73,7 +87,7 @@ void loop() {
   while (Serial.available()) {
     String line = Serial.readStringUntil('\n');
     // send the data:
-    Udp.beginPacket(host, 8888);
+    Udp.beginPacket(HOST, 8888);
     Udp.println(line);
     Udp.endPacket();
   }
@@ -93,9 +107,9 @@ void broadcast(String message) {
   // iterate over the client list
   // and send messages to all valid clients:
   for (int c = 0; c <= clientCount; c++) {
-    Udp.beginPacket(clients[c], 8888);
+      Udp.beginPacket("192.168.0.255",8888);
+//    Udp.beginPacket(clients[c], 8888);
     Udp.println(message);
     Udp.endPacket();
   }
 }
-

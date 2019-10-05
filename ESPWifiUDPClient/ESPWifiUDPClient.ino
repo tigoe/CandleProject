@@ -25,7 +25,7 @@ WiFiUDP Udp;
 
 const int port = 8888;
 byte mac[6];
-long tenMinutes = 600000;
+`long tenMinutes = 600000;
 int loginInterval = 10000;
 long lastNetworkMsg = 0;
 long lastLogin = 0;
