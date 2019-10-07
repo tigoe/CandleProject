@@ -3,22 +3,21 @@
   It echoes any serial bytes to the server, and any server bytes
   to the serial port
 
-  note: the header file "settings.h" is included in this repository.
+  note: the header file "arduino_secrets.h" is included in this repository.
   Include the following variables:
-  char ssid[]     = "ssid";     // your network SSID
-  char password[] = "password"; // your network password
-  char host[] = "192.168.0.2";  // the IP address of the device running the server
+  #define SECRET_SSID "ssid";       // network name
+  #define SECRET_PASS "password";   // network password
+  #define SECRET_HOST "x.x.x.x";    // server IP address
 
   created 26 Jun 2015
-  modified 28 Jul 2015
+  modified 7 Oct 2019
   by Tom Igoe
 
- */
+*/
 
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
-
-#include "settings.h"
+#include "arduino_secrets.h"
 
 WiFiClient client;
 WiFiUDP Udp;
@@ -38,8 +37,8 @@ void setup() {
   Serial.setTimeout(10);
   Udp.setTimeout(10);
   Serial.print("Connecting to ");   // connect to access point
-  Serial.println(ssid);
-  WiFi.begin(ssid, password);
+  Serial.println(SECRET_SSID);
+  WiFi.begin(SECRET_SSID, SECRET_PASS);
   WiFi.macAddress(mac);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -75,7 +74,7 @@ void loop() {
   while (Serial.available()) {
     String line = Serial.readStringUntil('\n');
     // send the MAC address to the server by way of greeting:
-    Udp.beginPacket(host, 8888);
+    Udp.beginPacket(SECRET_HOST, 8888);
     Udp.println(line);
     Udp.endPacket();
   }
@@ -108,13 +107,13 @@ boolean login() {
     macAddr += String(mac[i], HEX); // get the byte, convert to hex string
     macAddr += ":";                 // add a :
   }
-   if (mac[5] < 0x10) {             // add a leading 0 to single-digit hex numbers
-      macAddr += "0";
-    }
+  if (mac[5] < 0x10) {             // add a leading 0 to single-digit hex numbers
+    macAddr += "0";
+  }
   macAddr += String(mac[5], HEX);               // add the final byte
 
   // send the MAC address to the server by way of greeting:
-  Udp.beginPacket(host, 8888);
+  Udp.beginPacket(SECRET_HOST, 8888);
   Udp.println(macAddr);
   Udp.endPacket();
   lastLogin = millis();
