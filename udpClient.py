@@ -3,7 +3,8 @@ import sys
 import socket
 import time
 serverAddress = sys.argv[1] #"192.168.1.2"
-serverPort = 8888
+#serverAddress = "192.168.0.10"
+serverPort = 8888#2390
 
 outgoing =  sys.argv[2]
 

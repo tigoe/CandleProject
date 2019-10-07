@@ -159,4 +159,3 @@ unsigned long compare(unsigned long thisColor, unsigned long thatColor) {
   unsigned long result = ((unsigned long)r << 16) | ((unsigned long)g << 8) | b;
   return result;
 }
-

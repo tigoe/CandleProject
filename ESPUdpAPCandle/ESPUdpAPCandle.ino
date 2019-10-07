@@ -6,7 +6,7 @@
 WiFiUDP Udp;
 IPAddress ip(192, 168, 1, 2);
 IPAddress gateway(192, 168, 1, 1);
-IPAddress subnet(255, 255, 255, 0);
+IPAddress subnet(255, 255, 0, 0);
 IPAddress clients[6];
 
 
@@ -17,6 +17,9 @@ long lastNetworkMsg = 0;
 
 
 void setup() {
+  pinMode(5, OUTPUT);
+  digitalWrite(5, LOW);     // hold the ATTiny in reset until you connect
+  
   Serial.begin(9600);
   Serial.setTimeout(10);
   Udp.setTimeout(10);
@@ -29,6 +32,10 @@ void setup() {
   Serial.println(ssid);
   Serial.print("then telnet to IP address: ");
   Serial.println(ip);
+  digitalWrite(5, HIGH);       // enable the ATTiny
+  delay(2000);                 // ATTiny has 1000ms delay before reading
+  // send !!! to set the LED driver:
+  Serial.println("!!!");
 }
 
 
@@ -73,9 +80,7 @@ void loop() {
   while (Serial.available()) {
     String line = Serial.readStringUntil('\n');
     // send the data:
-    Udp.beginPacket(host, 8888);
-    Udp.println(line);
-    Udp.endPacket();
+    broadcast(line);
   }
 }
 
