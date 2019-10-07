@@ -1,6 +1,8 @@
 
+# Candle Assembly
 
-Housing
+Instructions for assembling the candles
+## Housing
 
 Spacer: laser cut plexi circle, 3/8", clear, same holes. spacer becomes drilling jug for tins. Always drill from outside of can to inside.
 
@@ -8,11 +10,11 @@ Spacer: laser cut plexi circle, 3/8", clear, same holes. spacer becomes drilling
 * 2 holes either side of center, matching battery housing holes, 0.125"
 * 2 holes outside footprint of battery housing, 0.125"
 
-PCB
+## PCB
 
 right angle female headers for power, sensor electrode, and sensor ground. Sensor headers glue to pcb as needed to stabilise solder joint. Sensor headers should face edge of board. Power header should parallel edge of board.
 
-Wires
+## Wires
 
 Switch wires will attach to battery pack ground and power connector ground.  Cut one 6" black wire to thread through hole. This and the battery pack black wire will connect to the switch.
 
@@ -20,7 +22,7 @@ power connector: Solder two male headers, 0.1" spacing. one connects to switch b
 
 electrode connectors: Cut two wires, one black (6") one white (2"). Solder one end to 1 straight male header each, shrink wrap solder joints. Strip other ends of wires for wrapping around sensor bolt.
 
-Assembly
+## Assembly
 
 1. Thread switch wires (black wire of battery pack and 6" black wire through center hole.
 2. Mount battery pack using nylon bolts through mounting holes. Fasten with nylon nuts. Tighten bolts and nuts.
