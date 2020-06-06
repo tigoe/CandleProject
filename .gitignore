@@ -56,3 +56,4 @@ ESPUdpAPCandle/arduino_secrets.h
 ESPWifiUDPClient/arduino_secrets.h
 WiFiNINA_AP_Candle/arduino_secrets.h
 WiFiNINA_AP/arduino_secrets.h
+.DS_Store
