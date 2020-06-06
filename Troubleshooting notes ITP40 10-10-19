@@ -1,0 +1,77 @@
+Check candle firmware for router re-connect
+
+NEoPixel Pin is 0
+
+Check AP firmware for load test
+
+Candle 1:   Pixels tested
+            ESP firmware upgraded
+            works OK   
+Candle 2:   needs mechanical assembly
+Candle 3:   Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 4:   Missing
+Candle 5:   Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 6:   Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 7:   Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 8:   Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 9:   Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 10:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 11: connecting, but not always
+Candle 12:   Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 13:  Missing
+Candle 14:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 15:  1 dead red pixel
+Candle 16:  1 pixel red dead
+            1 pixel green dead
+            ESP firmware upgraded        
+Candle 17:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 18:  Pixels tested
+            ESP firmware upgraded
+            works OK      
+Candle 19:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 21:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 22:  Pixels tested, one dead
+            ESP firmware upgraded
+            one dead pixel on all colors
+Candle 23:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 24:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 26:  Pixels tested
+            ESP firmware upgraded
+            works OK     
+Candle 27:  Pixels tested
+            ESP firmware upgraded
+            works OK       
+Candle 28:  Pixels tested
+            ESP firmware upgraded
+            works OK
+Candle 29:  Pixels tested
+            ESP firmware upgraded
+            works OK
