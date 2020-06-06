@@ -23,7 +23,7 @@ IPAddress subnet(255, 255, 255, 0);
 
 const int port = 8888;
 const int numClients = 30;
-IPAddress dns(8,8,8,8);
+IPAddress dns(8, 8, 8, 8);
 IPAddress clients[numClients];
 int clientCount = 0;
 long lastNetworkMsg = 0;
@@ -91,26 +91,28 @@ void loop() {
         Udp.endPacket();
         // increment the count of current clients:
         clientCount++;
+      } else {
+        Udp.beginPacket(Udp.remoteIP(), 8888);
+        Udp.println("Thanks!!!");
+        Udp.endPacket();
       }
       // if there are clients in the list,
       // send them the message
-      //if (clientCount > 0 ) {
-      broadcast(line);
-      // }
-
-
+      if (clientCount > 0 ) {
+        broadcast(line);
+      }
     }
     // timestamp the last message:
     lastNetworkMsg = millis();
   }
   // since this candle is the host, no need for this now:
-    // Read all the lines of the serial port and send them to the 
-    // connected clients:
-    while (Serial.available()) {
-      String line = Serial.readStringUntil('\n');
-      // send the data:
-      broadcast(line);
-    }
+  // Read all the lines of the serial port and send them to the
+  // connected clients:
+  while (Serial.available()) {
+    String line = Serial.readStringUntil('\n');
+    // send the data:
+    broadcast(line);
+  }
 }
 
 boolean checkAddress(IPAddress ip) {
