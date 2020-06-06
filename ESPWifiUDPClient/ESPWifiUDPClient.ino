@@ -32,26 +32,10 @@ boolean online = false;
 
 void setup() {
   pinMode(5, OUTPUT);
-  digitalWrite(5, LOW);     // hold the ATTiny in reset until you connect
   Serial.begin(9600);
   Serial.setTimeout(10);
   Udp.setTimeout(10);
-  Serial.print("Connecting to ");   // connect to access point
-  Serial.println(SECRET_SSID);
-  WiFi.begin(SECRET_SSID, SECRET_PASS);
-  WiFi.macAddress(mac);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  // when connected to access point, acknowledge it:
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-  delay(100);
-  digitalWrite(5, HIGH);       // activate the ATtiny
-  login();
+  connectToRouter();
 }
 
 
@@ -67,7 +51,7 @@ void loop() {
       Serial.print(line);
     }
     lastNetworkMsg = millis();
-    online = true;
+    online =  true;
   }
 
   // Read all the lines of the reply from server and print them to Serial
@@ -77,6 +61,12 @@ void loop() {
     Udp.beginPacket(SECRET_HOST, 8888);
     Udp.println(line);
     Udp.endPacket();
+  }
+
+  // if you're not connected to the router, attempt to reconnect:
+  if (WiFi.status() != WL_CONNECTED) {
+    connectToRouter();
+    online = false;
   }
 
   if (online == false) {
@@ -92,6 +82,31 @@ void loop() {
       online = false;
     }
   }
+}
+
+void connectToRouter() {
+  // let the ATTiny start:
+  delay(100);
+  online = false;
+  //inform the ATTiny that you're offline
+  Serial.println("~~~");
+  Serial.print("Connecting to ");   // connect to access point
+  Serial.println(SECRET_SSID);
+  WiFi.begin(SECRET_SSID, SECRET_PASS);
+
+  digitalWrite(5, LOW);     // hold the ATTiny in reset until you connect
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+   digitalWrite(5, HIGH);       // activate the ATtiny
+  // when connected to access point, acknowledge it:
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  delay(100);
+  login();
 }
 
 boolean login() {
